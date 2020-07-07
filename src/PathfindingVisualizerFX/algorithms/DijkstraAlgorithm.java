@@ -12,8 +12,6 @@ public class DijkstraAlgorithm {
     private int [][] grid;
     // array to mark unvisited nodes
     private boolean [][] unvisited;
-    // flag to determine if the shortest path has finished
-    private boolean doneMarked;
     // counter for number of unvisited nodes in unvisited so we don't have to search the whole 2D array every time
     private int unvisitedCounter;
     // 2D array to record previous shortest path of nodes
@@ -30,7 +28,6 @@ public class DijkstraAlgorithm {
         this.grid = grid;
         unvisited = new boolean[DIM][DIM];
         prev = new String[DIM][DIM];
-        doneMarked = false;
         unvisitedCounter = DIM * DIM;
         // initialize all values in distances and unvisited
         for (int row = 0; row < DIM; row++) {
@@ -44,7 +41,6 @@ public class DijkstraAlgorithm {
                 }
             }
         }
-
         // get start coordinates
         String [] startSplit = startCoordinates.split(", ");
         startRow = Integer.parseInt(startSplit[0]);
@@ -53,29 +49,20 @@ public class DijkstraAlgorithm {
     }
 
     /**
-     * Marks the shortest path on the grid
+     * Marks the shortest path on the grid by backtracking from target node in prev
      */
     public void markPath(int row, int column) {
         String previous = prev[row][column];
         if (grid[row][column] == VISITED_NODE) {
             grid[row][column] = PATH_NODE;
+            System.out.println(formatGrid(grid));
         } else if (grid[row][column] == START_NODE) {
-            doneMarked = true;
             return;
         }
         String [] previousSplit = previous.split(", ");
         int previousRow = Integer.parseInt(previousSplit[0]);
         int previousColumn = Integer.parseInt(previousSplit[1]);
-        if (!doneMarked)
-            markPath(previousRow, previousColumn);
-        return;
-        /*for (int r = 0; r < DIM; r++) {
-            for (int c = 0; c < DIM; c++) {
-
-                System.out.print(prev[r][c] + "\t\t");
-            }
-            System.out.println();
-        }*/
+        markPath(previousRow, previousColumn);
     }
 
     /**
@@ -101,6 +88,7 @@ public class DijkstraAlgorithm {
             unvisited[row][column] = false;
             unvisitedCounter--;
 
+            // check neighbouring nodes and assign their prev node to keep track of shortest path
             if (row > 0) {
                 queue.add((row - 1) + ", " + column);
                 if (grid[row - 1][column] == EMPTY_NODE) {
