@@ -1,24 +1,19 @@
 package PathfindingVisualizerFX;
 
+import PathfindingVisualizerFX.algorithms.DFSAlgorithm;
+import PathfindingVisualizerFX.algorithms.DijkstraAlgorithm;
+
 import java.util.Arrays;
+import static PathfindingVisualizerFX.algorithms.BFSAlgorithm.*;
+import static PathfindingVisualizerFX.Utility.*;
 
 public class Grid {
-    // dimension of the grid (length x length)
-    private final int DIM = 20;
-    // number code of empty node
-    private final int EMPTY_NODE = 0;
-    // number code of start node
-    private final int START_NODE = 1;
-    // number code of end node
-    private final int END_NODE = 2;
-    // number code of obstacle node
-    private final int OBSTACLE_NODE = 3;
     // 2D array to represent grid
-    private int [][] grid;
+    private static int [][] grid;
     // coordinates for start node
-    private int [] startCoordinates;
+    private String startCoordinates;
     // coordinates for end node
-    private int [] endCoordinates;
+    private String targetCoordinates;
 
     /**
      * Constructor for Grid
@@ -29,12 +24,12 @@ public class Grid {
         // populate the 2D array with empty nodes
         for (int [] row: grid)
             Arrays.fill(row, EMPTY_NODE);
-        // default start node will be at (0, 0)
-        startCoordinates = new int[] {0, 0};
-        grid[0][0] = START_NODE;
-        // default end node will be at (DIM - 1, DIM - 1)
-        endCoordinates = new int[] {DIM - 1, DIM - 1};
-        grid[DIM - 1][DIM - 1] = END_NODE;
+        // default start node will be at (4, 4)
+        startCoordinates = "4, 4";
+        grid[4][4] = START_NODE;
+        // default end node will be at (DIM - 5, DIM - 5)
+        targetCoordinates = (DIM - 5) + ", " + (DIM - 5);
+        grid[DIM - 5][DIM - 5] = TARGET_NODE;
     }
 
     /**
@@ -45,26 +40,52 @@ public class Grid {
             case 1:
                 grid = new int[][]
                         {
-                                {1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1},
-                                {1, 1, 2, 1, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1},
-                                {0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1},
-                                {0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0},
-                                {1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 1},
-                                {0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0},
-                                {0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0},
-                                {1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1},
-                                {1, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1},
-                                {0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1},
-                                {0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0},
-                                {1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1},
-                                {1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1},
-                                {1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1},
-                                {1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1},
-                                {1, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1},
-                                {0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 3, 0, 1, 0, 1},
-                                {0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0},
-                                {1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1},
-                                {1, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1}
+                                {OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE},
+                                {OBSTACLE_NODE, OBSTACLE_NODE, START_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE},
+                                {EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE},
+                                {EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE},
+                                {OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE},
+                                {EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE},
+                                {EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE},
+                                {OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE},
+                                {OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE},
+                                {EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE},
+                                {EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE},
+                                {OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE},
+                                {OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE},
+                                {OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE},
+                                {OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE},
+                                {OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE},
+                                {EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, TARGET_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE},
+                                {EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE},
+                                {OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE},
+                                {OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE}
+                        };
+                    startCoordinates = "1, 2";
+                break;
+            case 2:
+                grid = new int[][]
+                        {
+                                {OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE},
+                                {OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, TARGET_NODE, OBSTACLE_NODE},
+                                {OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE},
+                                {OBSTACLE_NODE},
+                                {OBSTACLE_NODE},
+                                {OBSTACLE_NODE},
+                                {OBSTACLE_NODE},
+                                {OBSTACLE_NODE},
+                                {OBSTACLE_NODE},
+                                {OBSTACLE_NODE},
+                                {OBSTACLE_NODE},
+                                {OBSTACLE_NODE},
+                                {OBSTACLE_NODE},
+                                {OBSTACLE_NODE},
+                                {OBSTACLE_NODE},
+                                {OBSTACLE_NODE},
+                                {OBSTACLE_NODE},
+                                {OBSTACLE_NODE},
+                                {OBSTACLE_NODE},
+                                {OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE}
                         };
                 break;
         }
@@ -77,17 +98,19 @@ public class Grid {
      */
     public void changeStartNode(int x, int y) {
         grid[x][y] = START_NODE;
-        startCoordinates = new int[] {x, y};
+        startCoordinates = Integer.toString(x) + ", " + Integer.toString(y);
     }
 
     /**
-     * Change end node coordinates in the 2D array
+     * Change target node coordinates in the 2D array
      * @param x     x coordinate of node
      * @param y     y coordinate of node
      */
-    public void changeEndNode(int x, int y) {
-        grid[x][y] = END_NODE;
-        endCoordinates = new int[] {x, y};
+    public void changeTargetNode(int x, int y) {
+        grid[x][y] = TARGET_NODE;
+        String [] oldCoordinates = targetCoordinates.split(", ");
+        grid[Integer.parseInt(oldCoordinates[0])][Integer.parseInt(oldCoordinates[1])] = EMPTY_NODE;
+        targetCoordinates = x + ", " + y;
     }
 
     /**
@@ -99,19 +122,55 @@ public class Grid {
         grid[x][y] = OBSTACLE_NODE;
     }
 
+    /**
+     * Remove obstacle node in the 2D array
+     * @param x     x coordinate of node
+     * @param y     y coordinate of node
+     */
     public void removeObstacle(int x, int y) {
         grid[x][y] = EMPTY_NODE;
     }
 
-    @Override
-    public String toString() {
-        String ret = "";
+    /**
+     * Performs BFS on grid
+     * @return boolean      true if target node is found else false
+     */
+    public boolean performBFS() {
+        return BFS(grid, startCoordinates);
+    }
+
+    /**
+     * Performs DFS on grid
+     * @return boolean      true if target node is found else false
+     */
+    public boolean performDFS() {
+        DFSAlgorithm DFSObj = new DFSAlgorithm(grid);
+        String [] coordinates = startCoordinates.split(", ");
+        return DFSObj.DFS(Integer.parseInt(coordinates[0]), Integer.parseInt(coordinates[1]));
+    }
+
+    public boolean performDijkstra() {
+        DijkstraAlgorithm DijkstraObj = new DijkstraAlgorithm(grid, startCoordinates);
+        return DijkstraObj.Dijkstra();
+    }
+
+    /**
+     * Clears the grid of visited nodes
+     */
+    public void clearPath() {
         for (int row = 0; row < DIM; row++) {
             for (int column = 0; column < DIM; column++) {
-                ret = ret + Integer.toString(grid[row][column]) + " ";
-                if (column == DIM - 1) ret += "\n";
+                if (grid[row][column] == VISITED_NODE || grid[row][column] == PATH_NODE)
+                    grid[row][column] = EMPTY_NODE;
             }
         }
-        return ret;
+    }
+
+    /**
+     * Get the grid
+     * @return grid     2D array representing grid
+     */
+    public int [][] getGrid() {
+        return grid;
     }
 }
