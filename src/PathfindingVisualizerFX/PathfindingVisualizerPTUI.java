@@ -10,42 +10,63 @@ public class PathfindingVisualizerPTUI {
     private static boolean solved;
     // display message
     private final static String MESSAGE =
-            "\nPATHFINDING VISUALIZER\n----------" +
-            "\nNUMBER CODES\n----------" +
-            "\nEMPTY NODE =\t\t0\nSTART NODE =\t\t1\nTARGET NODE =\t\t2\nOBSTACLE NODE =\t\t3\nVISITED NODE:\t\t4\nCHOSEN PATH:\t\t5" +
-            "\n----------" +
-            "\nCOMMANDS\n----------" +
-            "\n1. HELP";
+        "\nPATHFINDING VISUALIZER\n----------" +
+        "\nNUMBER CODES\n----------" +
+        "\nEMPTY NODE =\t\t0\nSTART NODE =\t\t1\nTARGET NODE =\t\t2\nOBSTACLE NODE =\t\t3\nVISITED NODE:\t\t4\nCHOSEN PATH:\t\t5" +
+        "\n----------" +
+        "\nCOMMANDS\n----------" +
+        "\n1. HELP";
     // todo commands for interactions with the grid
     private final static String ALGORITHMS = "\nSELECT THE NUMBER YOU WANT TO RUN\n----------" +
-            "\n1. BFS (Breadth First Search)" +
-            "\n2. DFS (Depth First Search)" +
-            "\n3. Dijkstra" +
-            "\n\nYour algorithm number: ";
+        "\n1. BFS (Breadth First Search)" +
+        "\n2. DFS (Depth First Search)" +
+        "\n3. Dijkstra" +
+        "\n\nYour algorithm number: ";
     // preset choices
     private final static String PRESETS =
-                    "\nCHOOSE YOUR PRESET (NUMBER):" +
-                    "\n----------" +
-                    "\n1.\t3 3 0 0 3 0 3 0 0 3 0 0 3 0 3 0 0 0 0 3" +
-                    "\n\t3 3 1 3 0 0 0 0 3 3 0 3 3 0 0 3 3 3 0 3" +
-                    "\n\t0 3 0 0 3 0 0 3 3 0 0 0 0 3 0 0 0 3 0 3" +
-                    "\n\t0 0 0 3 0 3 0 0 3 0 0 3 3 0 3 0 3 0 0 0" +
-                    "\n\t3 3 0 0 0 0 3 0 0 3 0 3 0 0 3 0 3 0 3 3" +
-                    "\n\t0 3 0 3 3 0 0 0 3 0 0 3 0 0 0 0 0 0 3 0" +
-                    "\n\t0 0 0 0 3 3 3 3 3 0 3 0 3 3 3 3 0 3 3 0" +
-                    "\n\t3 3 0 0 3 0 3 0 0 3 0 0 3 0 3 0 0 0 0 3" +
-                    "\n\t3 0 0 3 0 0 0 0 3 3 0 3 3 0 0 3 3 3 0 3" +
-                    "\n\t0 3 0 0 3 0 0 3 3 0 0 0 0 3 0 0 0 3 0 3" +
-                    "\n\t0 0 0 3 0 0 0 0 3 0 0 3 3 0 3 0 3 0 0 0" +
-                    "\n\t3 3 0 0 0 3 0 0 3 3 3 3 3 0 3 0 3 0 3 3" +
-                    "\n\t3 3 0 0 3 3 3 0 3 3 3 3 3 0 3 3 3 0 3 3" +
-                    "\n\t3 3 0 0 3 3 3 0 3 3 3 3 3 0 0 0 0 0 3 3" +
-                    "\n\t3 3 0 0 3 0 3 0 0 0 0 0 0 0 3 0 3 0 0 3" +
-                    "\n\t3 0 0 3 0 0 0 0 3 3 0 3 3 0 0 3 3 3 0 3" +
-                    "\n\t0 3 0 0 3 0 0 3 3 0 0 0 0 0 0 2 0 3 0 3" +
-                    "\n\t0 0 0 3 0 3 0 0 3 0 0 3 3 0 3 0 3 0 0 0" +
-                    "\n\t3 3 0 0 0 0 0 0 0 0 0 0 0 0 3 3 3 3 3 3" +
-                    "\n\t0 0 0 3 3 3 3 3 0 0 3 3 3 0 0 0 0 0 0 3";
+        "\nCHOOSE YOUR PRESET (NUMBER):" +
+        "\n----------" +
+        "\n1.\t3 3 0 0 3 0 3 0 0 3 0 0 3 0 3 0 0 0 0 3" +
+        "\n\t3 3 1 3 0 0 0 0 3 3 0 3 3 0 0 3 3 3 0 3" +
+        "\n\t0 3 0 0 3 0 0 3 3 0 0 0 0 3 0 0 0 3 0 3" +
+        "\n\t0 0 0 3 0 3 0 0 3 0 0 3 3 0 3 0 3 0 0 0" +
+        "\n\t3 3 0 0 0 0 3 0 0 3 0 3 0 0 3 0 3 0 3 3" +
+        "\n\t0 3 0 3 3 0 0 0 3 0 0 3 0 0 0 0 0 0 3 0" +
+        "\n\t0 0 0 0 3 3 3 3 3 0 3 0 3 3 3 3 0 3 3 0" +
+        "\n\t3 3 0 0 3 0 3 0 0 3 0 0 3 0 3 0 0 0 0 3" +
+        "\n\t3 0 0 3 0 0 0 0 3 3 0 3 3 0 0 3 3 3 0 3" +
+        "\n\t0 3 0 0 3 0 0 3 3 0 0 0 0 3 0 0 0 3 0 3" +
+        "\n\t0 0 0 3 0 0 0 0 3 0 0 3 3 0 3 0 3 0 0 0" +
+        "\n\t3 3 0 0 0 3 0 0 3 3 3 3 3 0 3 0 3 0 3 3" +
+        "\n\t3 3 0 0 3 3 3 0 3 3 3 3 3 0 3 3 3 0 3 3" +
+        "\n\t3 3 0 0 3 3 3 0 3 3 3 3 3 0 0 0 0 0 3 3" +
+        "\n\t3 3 0 0 3 0 3 0 0 0 0 0 0 0 3 0 3 0 0 3" +
+        "\n\t3 0 0 3 0 0 0 0 3 3 0 3 3 0 0 3 3 3 0 3" +
+        "\n\t0 3 0 0 3 0 0 3 3 0 0 0 0 0 0 2 0 3 0 3" +
+        "\n\t0 0 0 3 0 3 0 0 3 0 0 3 3 0 3 0 3 0 0 0" +
+        "\n\t3 3 0 0 0 0 0 0 0 0 0 0 0 0 3 3 3 3 3 3" +
+        "\n\t0 0 0 3 3 3 3 3 0 0 3 3 3 0 0 0 0 0 0 3" +
+        "\n" +
+        "\n3.\t3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3" +
+        "\n\t3 1 3 0 3 0 3 0 3 0 0 0 0 0 0 3 0 0 0 3" +
+        "\n\t3 0 3 0 3 0 3 0 3 3 3 3 0 3 0 3 0 3 0 3" +
+        "\n\t3 0 3 0 3 0 3 0 0 0 0 0 0 3 0 3 0 3 0 3" +
+        "\n\t3 0 3 0 3 0 3 0 3 0 3 3 3 3 0 3 0 3 0 3" +
+        "\n\t3 0 3 0 3 0 3 0 0 0 0 0 0 3 0 3 0 3 0 3" +
+        "\n\t3 0 3 0 3 0 3 0 3 3 3 3 0 3 0 3 0 3 0 3" +
+        "\n\t3 0 3 0 3 0 3 0 3 0 0 0 0 3 0 3 0 3 0 3" +
+        "\n\t3 0 3 0 0 0 3 0 3 0 3 3 3 3 0 3 0 3 0 3" +
+        "\n\t3 0 3 0 3 0 3 0 0 0 0 0 0 3 0 3 0 3 0 3" +
+        "\n\t3 0 3 0 3 0 3 0 3 3 3 3 0 3 0 3 0 3 0 3" +
+        "\n\t3 0 3 0 3 0 3 0 3 0 0 0 0 3 0 3 0 3 0 3" +
+        "\n\t3 0 3 0 3 0 3 0 3 0 3 3 3 3 0 3 0 3 0 3" +
+        "\n\t3 0 3 0 3 0 3 0 3 0 0 0 0 3 0 3 0 3 0 3" +
+        "\n\t3 0 3 0 3 0 3 0 3 3 3 3 0 3 0 3 0 3 0 3" +
+        "\n\t3 0 0 0 3 0 3 0 0 0 0 0 0 3 0 3 0 3 0 3" +
+        "\n\t3 0 3 0 3 0 3 0 3 3 3 3 0 3 0 3 0 3 0 3" +
+        "\n\t3 0 3 0 3 0 3 0 3 0 0 0 0 3 0 3 0 3 0 3" +
+        "\n\t3 0 3 0 3 0 0 0 0 0 3 3 0 0 0 0 0 3 2 3" +
+        "\n\t3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3";
 
     /**
      * Reads the user input
@@ -120,42 +141,24 @@ public class PathfindingVisualizerPTUI {
                                 } else {
                                     System.out.println("Path to target node doesn't exist!");
                                 }
+                                solved = true;
+                            } else {
+                                System.out.println("\nCreate a new grid first!");
                             }
                             longDelay();
                             break;
+                        case 4:
+                            // if the grid is fresh, run a*
+                            if (!solved) {
+                                grid.performAStar();
+                            } else {
+                                System.out.println("\nCreate a new grid first!");
+                            }
                         default:
                             System.out.println("Invalid algorithm number.");
                             longDelay();
                     }
                     break;
-                /*case "BFS":
-                    // if the grid is fresh, run bfs
-                    if (!solved) {
-                        if (grid.performBFS()) {
-                            System.out.println("Path to target node exists!");
-                        } else {
-                            System.out.println("Path to target node doesn't exist!");
-                        }
-                        solved = true;
-                    } else {
-                        System.out.println("\nCreate a new grid first!");
-                    }
-                    longDelay();
-                    break;
-                case "DFS":
-                    // if the grid is fresh, run dfs
-                    if (!solved) {
-                        if (grid.performDFS()) {
-                            System.out.println("Path to target node exists!");
-                        } else {
-                            System.out.println("Path to target node doesn't exist!");
-                        }
-                        solved = true;
-                    } else {
-                        System.out.println("Create a new grid first!");
-                    }
-                    longDelay();
-                    break;*/
                 case "CHANGE TARGET":
                     System.out.print("\nState x-coordinate (up-down) (1-20): ");
                     int x = scan.nextInt();

@@ -1,5 +1,6 @@
 package PathfindingVisualizerFX;
 
+import PathfindingVisualizerFX.algorithms.AStarAlgorithm;
 import PathfindingVisualizerFX.algorithms.DFSAlgorithm;
 import PathfindingVisualizerFX.algorithms.DijkstraAlgorithm;
 
@@ -39,54 +40,82 @@ public class Grid {
         switch (number) {
             case 1:
                 grid = new int[][]
-                        {
-                                {OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE},
-                                {OBSTACLE_NODE, OBSTACLE_NODE, START_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE},
-                                {EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE},
-                                {EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE},
-                                {OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE},
-                                {EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE},
-                                {EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE},
-                                {OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE},
-                                {OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE},
-                                {EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE},
-                                {EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE},
-                                {OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE},
-                                {OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE},
-                                {OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE},
-                                {OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE},
-                                {OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE},
-                                {EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, TARGET_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE},
-                                {EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE},
-                                {OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE},
-                                {OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE}
-                        };
-                    startCoordinates = "1, 2";
+                    {
+                        {3, 3, 0, 0, 3, 0, 3, 0, 0, 3, 0, 0, 3, 0, 3, 0, 0, 0, 0, 3},
+                        {3, 3, 1, 3, 0, 0, 0, 0, 3, 3, 0, 3, 3, 0, 0, 3, 3, 3, 0, 3},
+                        {0, 3, 0, 0, 3, 0, 0, 3, 3, 0, 0, 0, 0, 3, 0, 0, 0, 3, 0, 3},
+                        {0, 0, 0, 3, 0, 3, 0, 0, 3, 0, 0, 3, 3, 0, 3, 0, 3, 0, 0, 0},
+                        {3, 3, 0, 0, 0, 0, 3, 0, 0, 3, 0, 3, 0, 0, 3, 0, 3, 0, 3, 3},
+                        {0, 3, 0, 3, 3, 0, 0, 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 3, 0},
+                        {0, 0, 0, 0, 3, 3, 3, 3, 3, 0, 3, 0, 3, 3, 3, 3, 0, 3, 3, 0},
+                        {3, 3, 0, 0, 3, 0, 3, 0, 0, 3, 0, 0, 3, 0, 3, 0, 0, 0, 0, 3},
+                        {3, 0, 0, 3, 0, 0, 0, 0, 3, 3, 0, 3, 3, 0, 0, 3, 3, 3, 0, 3},
+                        {0, 3, 0, 0, 3, 0, 0, 3, 3, 0, 0, 0, 0, 3, 0, 0, 0, 3, 0, 3},
+                        {0, 0, 0, 3, 0, 0, 0, 0, 3, 0, 0, 3, 3, 0, 3, 0, 3, 0, 0, 0},
+                        {3, 3, 0, 0, 0, 3, 0, 0, 3, 3, 3, 3, 3, 0, 3, 0, 3, 0, 3, 3},
+                        {3, 3, 0, 0, 3, 3, 3, 0, 3, 3, 3, 3, 3, 0, 3, 3, 3, 0, 3, 3},
+                        {3, 3, 0, 0, 3, 3, 3, 0, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 3, 3},
+                        {3, 3, 0, 0, 3, 0, 3, 0, 0, 0, 0, 0, 0, 0, 3, 0, 3, 0, 0, 3},
+                        {3, 0, 0, 3, 0, 0, 0, 0, 3, 3, 0, 3, 3, 0, 0, 3, 3, 3, 0, 3},
+                        {0, 3, 0, 0, 3, 0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 2, 0, 3, 0, 3},
+                        {0, 0, 0, 3, 0, 3, 0, 0, 3, 0, 0, 3, 3, 0, 3, 0, 3, 0, 0, 0},
+                        {3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3},
+                        {3, 0, 0, 3, 0, 0, 0, 0, 3, 3, 0, 3, 3, 0, 0, 3, 3, 3, 0, 3}
+                    };
+                startCoordinates = "1, 2";
+                targetCoordinates = "16, 15";
                 break;
             case 2:
                 grid = new int[][]
                         {
-                                {OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE},
-                                {OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, TARGET_NODE, OBSTACLE_NODE},
-                                {OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, EMPTY_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, EMPTY_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE},
-                                {OBSTACLE_NODE},
-                                {OBSTACLE_NODE},
-                                {OBSTACLE_NODE},
-                                {OBSTACLE_NODE},
-                                {OBSTACLE_NODE},
-                                {OBSTACLE_NODE},
-                                {OBSTACLE_NODE},
-                                {OBSTACLE_NODE},
-                                {OBSTACLE_NODE},
-                                {OBSTACLE_NODE},
-                                {OBSTACLE_NODE},
-                                {OBSTACLE_NODE},
-                                {OBSTACLE_NODE},
-                                {OBSTACLE_NODE},
-                                {OBSTACLE_NODE},
-                                {OBSTACLE_NODE},
-                                {OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE, OBSTACLE_NODE}
+                                {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3},
+                                {3, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0, 2, 3},
+                                {3, 3, 3, 0, 3, 0, 3, 3, 3, 0, 3, 0, 0, 0, 3, 0, 3, 0, 3, 3, 3, 3},
+                                {3},
+                                {3},
+                                {3},
+                                {3},
+                                {3},
+                                {3},
+                                {3},
+                                {3},
+                                {3},
+                                {3},
+                                {3},
+                                {3},
+                                {3},
+                                {3},
+                                {3},
+                                {3},
+                                {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3}
                         };
+                break;
+            case 3:
+                grid = new int[][]
+                    {
+                        {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3},
+                        {3, 1, 3, 0, 3, 0, 3, 0, 3, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 3},
+                        {3, 0, 3, 0, 3, 0, 3, 0, 3, 3, 3, 3, 0, 3, 0, 3, 0, 3, 0, 3},
+                        {3, 0, 3, 0, 3, 0, 3, 0, 0, 0, 0, 0, 0, 3, 0, 3, 0, 3, 0, 3},
+                        {3, 0, 3, 0, 3, 0, 3, 0, 3, 0, 3, 3, 3, 3, 0, 3, 0, 3, 0, 3},
+                        {3, 0, 3, 0, 3, 0, 3, 0, 0, 0, 0, 0, 0, 3, 0, 3, 0, 3, 0, 3},
+                        {3, 0, 3, 0, 3, 0, 3, 0, 3, 3, 3, 3, 0, 3, 0, 3, 0, 3, 0, 3},
+                        {3, 0, 3, 0, 3, 0, 3, 0, 3, 0, 0, 0, 0, 3, 0, 3, 0, 3, 0, 3},
+                        {3, 0, 3, 0, 0, 0, 3, 0, 3, 0, 3, 3, 3, 3, 0, 3, 0, 3, 0, 3},
+                        {3, 0, 3, 0, 3, 0, 3, 0, 0, 0, 0, 0, 0, 3, 0, 3, 0, 3, 0, 3},
+                        {3, 0, 3, 0, 3, 0, 3, 0, 3, 3, 3, 3, 0, 3, 0, 3, 0, 3, 0, 3},
+                        {3, 0, 3, 0, 3, 0, 3, 0, 3, 0, 0, 0, 0, 3, 0, 3, 0, 3, 0, 3},
+                        {3, 0, 3, 0, 3, 0, 3, 0, 3, 0, 3, 3, 3, 3, 0, 3, 0, 3, 0, 3},
+                        {3, 0, 3, 0, 3, 0, 3, 0, 3, 0, 0, 0, 0, 3, 0, 3, 0, 3, 0, 3},
+                        {3, 0, 3, 0, 3, 0, 3, 0, 3, 3, 3, 3, 0, 3, 0, 3, 0, 3, 0, 3},
+                        {3, 0, 0, 0, 3, 0, 3, 0, 0, 0, 0, 0, 0, 3, 0, 3, 0, 3, 0, 3},
+                        {3, 0, 3, 0, 3, 0, 3, 0, 3, 3, 3, 3, 0, 3, 0, 3, 0, 3, 0, 3},
+                        {3, 0, 3, 0, 3, 0, 3, 0, 3, 0, 0, 0, 0, 3, 0, 3, 0, 3, 0, 3},
+                        {3, 0, 3, 0, 3, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 0, 0, 3, 2, 3},
+                        {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3}
+                    };
+                startCoordinates = "1, 1";
+                targetCoordinates = "18, 18";
                 break;
         }
     }
@@ -152,6 +181,11 @@ public class Grid {
     public boolean performDijkstra() {
         DijkstraAlgorithm DijkstraObj = new DijkstraAlgorithm(grid, startCoordinates);
         return DijkstraObj.Dijkstra();
+    }
+
+    public boolean performAStar() {
+        AStarAlgorithm AStarObj = new AStarAlgorithm(grid, startCoordinates, targetCoordinates);
+        return true;
     }
 
     /**
