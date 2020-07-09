@@ -5,6 +5,7 @@ import java.util.PriorityQueue;
 
 import static PathfindingVisualizerFX.Utility.DIM;
 import static PathfindingVisualizerFX.Utility.OBSTACLE_NODE;
+import static PathfindingVisualizerFX.Utility.VISITED_NODE;
 
 public class AStarAlgorithm {
 
@@ -67,11 +68,20 @@ public class AStarAlgorithm {
      * For more information, watch Computerphile's video: https://www.youtube.com/watch?v=ySN5Wnu88nE
      */
 
+    // 2D array to represent grid
     private int [][] grid;
+    // coordinates of start node
     private String startCoordinates;
+    // coordinates of target node
     private String targetCoordinates;
+    // 2D array to store all node's distance to target node
     private double [][] distancesToTarget;
+    // priority queue to determine which nodes get processed first
     private PriorityQueue<QueueItem> pQueue;
+    // 2D array to store booleans on whether or not a node has processed
+    private boolean [][] processed;
+    // 2D array to store previous node coordinates
+    private String [][] prev;
 
     /**
      * Constructor for AStarAlgorithm
@@ -84,35 +94,124 @@ public class AStarAlgorithm {
         this.startCoordinates = startCoordinates;
         this.targetCoordinates = targetCoordinates;
         distancesToTarget = new double[DIM][DIM];
-        //
-        calculateDistanceToTarget();
-        // comparator for priority queue (pQueue)
-        Comparator<QueueItem> comparator = new Comparator<QueueItem>() {
-            @Override
-            public int compare(QueueItem o1, QueueItem o2) {
-                if (o1.getHeuristicDistance() - o2.getHeuristicDistance() <= 0) {
-                    return -1;
+        processed = new boolean[DIM][DIM];
+        prev = new String[DIM][DIM];
+        for (int row = 0; row < DIM; row++) {
+            for (int column = 0; column < DIM; column++) {
+                if (grid[row][column] == OBSTACLE_NODE) {
+                    processed[row][column] = true;
+                    prev[row][column] = "X, X";
                 } else {
-                    return 1;
+                    processed[row][column] = false;
+                    prev[row][column] = "";
                 }
             }
+        }
+        // calculate all nodes' distance to target node
+        calculateDistanceToTarget();
+        // comparator for priority queue (pQueue)
+        Comparator<QueueItem> comparator = (o1, o2) -> {
+            if (o1.getHeuristicDistance() <= o2.getHeuristicDistance())
+                return -1;
+            return 1;
         };
-        // priority queue to queue items from least total distance to
+        // priority queue to queue items from least heuristic distance to most heuristic distance
         pQueue = new PriorityQueue<>(comparator);
+    }
+
+    /**
+     * Looks into pQueue and checks if there is a node with a specific coordinate
+     * @return ret      QueueItem if node with coordinate is in pQueue else null
+     */
+    public QueueItem containsNode(int row, int column) {
+        for (QueueItem item : pQueue) {
+            String [] coordinatesSplit = item.getCoordinates().split(", ");
+            int checkRow = Integer.parseInt(coordinatesSplit[0]);
+            int checkColumn = Integer.parseInt(coordinatesSplit[1]);
+            if (row == checkRow && column == checkColumn)
+                return item;
+        }
+        return null;
+    }
+
+    /**
+     * set the coordinates in processed to true
+     * @param item      QueueItem that holds the coordinates
+     */
+    public void markProcessed(QueueItem item) {
+        String [] coordinatesSplit = item.getCoordinates().split(", ");
+        int row = Integer.parseInt(coordinatesSplit[0]);
+        int column = Integer.parseInt(coordinatesSplit[1]);
+        // todo DEBUG / TEST
+        if (processed[row][column]) {
+            System.out.println("SOMETHING IS WRONG, REMOVED IS ALREADY PROCESSED!");
+            System.exit(1);
+        }
+        processed[row][column] = true;
+    }
+
+    /**
+     * Looks at all the neighbouring nodes and adds them into pQueue to be processed later
+     * @param item      current item in pQueue
+     */
+    public void lookAtNeighbours(QueueItem item) {
+        // convert coordinates
+        String [] coordinatesSplit = item.getCoordinates().split(", ");
+        int row = Integer.parseInt(coordinatesSplit[0]);
+        int column = Integer.parseInt(coordinatesSplit[1]);
+        // direction vectors
+        int [] dRow = {-1, 0, 1, 0};
+        int [] dColumn = {0, 1, 0, -1};
+        // look at the top, left, bottom, and right nodes and check if they're processed or obstacle nodes and add them
+        // to pQueue accordingly
+        for (int i = 0; i < 4; i++) {
+            int updatedRow = row + dRow[i];
+            int updatedColumn = column + dColumn[i];
+            // check boundaries
+            if (updatedRow >= 0 && updatedRow < DIM && updatedColumn >= 0 && updatedColumn < DIM
+                && !processed[row + dRow[i]][column + dColumn[i]]
+                && distancesToTarget[row + dRow[i]][column + dColumn[i]] != -1) {
+
+                // first create the QueueItem to compare later or add
+                QueueItem pendingItem = new QueueItem(
+                    row + dRow[i] + ", " + column + dColumn[i],
+                    item.getDistance() + 1,
+                    item.getDistanceToTarget()
+                );
+
+                // check if node is already in the pQueue and compare heuristic distances if so
+                QueueItem compareItem = containsNode(updatedRow, updatedColumn);
+                if (compareItem == null) {
+                    prev[updatedRow][updatedColumn] = item.getCoordinates();
+                    pQueue.add(pendingItem);
+                } else if (pendingItem.getHeuristicDistance() < compareItem.getHeuristicDistance()) {
+                    prev[updatedRow][updatedColumn] = item.getCoordinates();
+                    pQueue.remove(compareItem);
+                    pQueue.add(pendingItem);
+                }
+                // todo DEBUG / TEST
+                if (grid[updatedRow][updatedColumn] == OBSTACLE_NODE) {
+                    System.out.println("SOMETHING IS WRONG! OBSTACLE BEING MARKED VISITED");
+                    System.exit(1);
+                }
+                grid[updatedRow][updatedColumn] = VISITED_NODE;
+            }
+        }
     }
 
     /**
      * Calculates the distances from each node to the target node
      */
     public void calculateDistanceToTarget() {
-        String [] targetSplit = startCoordinates.split(", ");
+        // covert coordinates
+        String [] targetSplit = targetCoordinates.split(", ");
         int targetRow = Integer.parseInt(targetSplit[0]);
         int targetColumn = Integer.parseInt(targetSplit[1]);
-        System.out.println(startCoordinates);
-        System.out.println(targetCoordinates);
+        // calculate the distance to target node at every node in the grid unless it's an obstacle node
         for (int row = 0; row < DIM; row++) {
             for (int column = 0; column < DIM; column++) {
                 if (grid[row][column] != OBSTACLE_NODE) {
+                    // pythagorean theorem to calculate straight line distance to target node
                     distancesToTarget[row][column] = Math.sqrt(Math.pow(targetRow - row, 2) + Math.pow(targetColumn - column, 2));
                 } else {
                     distancesToTarget[row][column] = -1;
@@ -122,5 +221,33 @@ public class AStarAlgorithm {
     }
 
 
+    /**
+     * Marks the shortest chosen path in the grid
+     */
+    public void markPath() {
+
+    }
+
+    public boolean performAStar() {
+        // convert start node coordinates
+        String [] startSplit = startCoordinates.split(", ");
+        int startRow = Integer.parseInt(startSplit[0]);
+        int startColumn = Integer.parseInt(startSplit[1]);
+        // mark start node's previous node in prev
+        prev[startRow][startColumn] = "START";
+        // add start node to begin with
+        pQueue.add(new QueueItem(startCoordinates, 0, distancesToTarget[startRow][startColumn]));
+        while (!pQueue.isEmpty()) {
+            QueueItem removed = pQueue.remove();
+            // mark removed as processed
+            markProcessed(removed);
+            // the moment the removed element is the target node, we finish the algorithm
+            if (removed.getCoordinates().equals(targetCoordinates))
+                return true;
+            // look at the neighbours of the removed item and add them to pQueue
+            lookAtNeighbours(removed);
+        }
+        return false;
+    }
 
 }

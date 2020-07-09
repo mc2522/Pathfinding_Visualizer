@@ -168,8 +168,6 @@ public class PathfindingVisualizerPTUI {
                     break;
                 case "EXIT":
                     System.exit(0);
-                case "\n":
-                    break;
                 default:
                     System.out.println("Command not recognized.");
                     shortDelay();
