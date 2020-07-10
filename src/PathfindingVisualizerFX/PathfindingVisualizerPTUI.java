@@ -21,6 +21,7 @@ public class PathfindingVisualizerPTUI {
         "\n1. BFS (Breadth First Search)" +
         "\n2. DFS (Depth First Search)" +
         "\n3. Dijkstra" +
+        "\n4. A*" +
         "\n\nYour algorithm number: ";
     // preset choices
     private final static String PRESETS =
@@ -148,12 +149,19 @@ public class PathfindingVisualizerPTUI {
                             longDelay();
                             break;
                         case 4:
-                            // if the grid is fresh, run a*
+                            // if the grid is fresh, run A*
                             if (!solved) {
-                                grid.performAStar();
+                                if (grid.performAStar()) {
+                                    System.out.println("Path to target node exists!");
+                                } else {
+                                    System.out.println("Path to target node doesn't exist!");
+                                }
+                                solved = true;
                             } else {
                                 System.out.println("\nCreate a new grid first!");
                             }
+                            longDelay();
+                            break;
                         default:
                             System.out.println("Invalid algorithm number.");
                             longDelay();

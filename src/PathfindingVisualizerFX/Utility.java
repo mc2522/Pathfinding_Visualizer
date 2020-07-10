@@ -21,8 +21,9 @@ public class Utility {
      */
     public static void shortDelay() {
         try {
-            Thread.sleep(250);
+            Thread.sleep(100);
         } catch (InterruptedException e) {
+            e.printStackTrace();
             Thread.currentThread().interrupt();
         }
     }
@@ -34,6 +35,7 @@ public class Utility {
         try {
             Thread.sleep(1500);
         } catch (InterruptedException e) {
+            e.printStackTrace();
             Thread.currentThread().interrupt();
         }
     }

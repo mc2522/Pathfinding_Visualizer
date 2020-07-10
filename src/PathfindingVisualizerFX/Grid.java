@@ -185,7 +185,7 @@ public class Grid {
 
     public boolean performAStar() {
         AStarAlgorithm AStarObj = new AStarAlgorithm(grid, startCoordinates, targetCoordinates);
-        return true;
+        return AStarObj.AStar();
     }
 
     /**
