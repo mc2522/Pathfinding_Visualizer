@@ -210,8 +210,8 @@ public class AStarAlgorithm {
                 if (grid[updatedRow][updatedColumn] != TARGET_NODE) {
                     grid[updatedRow][updatedColumn] = VISITED_NODE;
                     System.out.println(formatGrid(grid));
+                    shortDelay();
                 }
-                shortDelay();
             }
         }
     }

@@ -14,14 +14,19 @@ public class PathfindingVisualizerPTUI {
         "\nNUMBER CODES\n----------" +
         "\nEMPTY NODE =\t\t0\nSTART NODE =\t\t1\nTARGET NODE =\t\t2\nOBSTACLE NODE =\t\t3\nVISITED NODE:\t\t4\nCHOSEN PATH:\t\t5" +
         "\n----------" +
-        "\nCOMMANDS\n----------" +
-        "\n1. HELP";
-    // todo commands for interactions with the grid
+        "\nCOMMANDS:" +
+        "\n1. HELP" +
+        "\n2. ALGORITHMS" +
+        "\n3. PRESETS" +
+        "\n4. CLEAR PATH" +
+        "\n5. EXIT";
+    // algorithms choices
     private final static String ALGORITHMS = "\nSELECT THE NUMBER YOU WANT TO RUN\n----------" +
         "\n1. BFS (Breadth First Search)" +
         "\n2. DFS (Depth First Search)" +
         "\n3. Dijkstra" +
         "\n4. A*" +
+        "\n5. Go Back" +
         "\n\nYour algorithm number: ";
     // preset choices
     private final static String PRESETS =
@@ -47,6 +52,27 @@ public class PathfindingVisualizerPTUI {
         "\n\t0 0 0 3 0 3 0 0 3 0 0 3 3 0 3 0 3 0 0 0" +
         "\n\t3 3 0 0 0 0 0 0 0 0 0 0 0 0 3 3 3 3 3 3" +
         "\n\t0 0 0 3 3 3 3 3 0 0 3 3 3 0 0 0 0 0 0 3" +
+        "\n" +
+        "\n2.\t3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3" +
+        "\n\t3 0 3 0 0 3 0 0 3 0 0 3 0 0 3 0 0 3 1 3" +
+        "\n\t3 0 0 3 0 0 3 0 0 0 0 0 3 0 0 3 0 0 0 3" +
+        "\n\t3 3 0 0 3 0 0 0 0 0 3 0 0 3 0 0 0 0 0 3" +
+        "\n\t3 0 3 0 0 3 0 0 3 0 0 3 0 0 3 0 0 3 0 3" +
+        "\n\t3 0 0 3 0 0 0 0 0 3 0 0 3 0 0 0 0 0 3 3" +
+        "\n\t3 3 0 0 0 0 0 3 0 0 3 0 0 0 0 0 3 0 0 3" +
+        "\n\t3 0 3 0 0 3 0 0 3 0 0 3 0 0 3 0 0 3 0 3" +
+        "\n\t3 0 0 0 0 0 3 0 0 3 0 0 0 0 0 3 0 0 3 3" +
+        "\n\t3 0 0 0 3 0 0 3 0 0 0 0 0 3 0 0 3 0 0s 3" +
+        "\n\t3 0 3 0 0 3 0 0 3 0 0 3 0 0 3 0 0 0 0 3" +
+        "\n\t3 2 0 3 0 0 3 0 0 0 0 0 3 0 0 3 0 0 3 3" +
+        "\n\t3 3 0 0 3 0 0 0 0 0 3 0 0 3 0 0 0 0 0 3" +
+        "\n\t3 0 3 0 0 3 0 0 3 0 0 3 0 0 0 0 0 3 0 3" +
+        "\n\t3 0 0 3 0 0 0 0 0 3 0 0 3 0 0 3 0 0 3 3" +
+        "\n\t3 3 0 0 0 0 0 3 0 0 3 0 0 0 0 0 3 0 0 3" +
+        "\n\t3 0 3 0 0 0 0 0 3 0 0 0 0 0 3 0 0 3 0 3" +
+        "\n\t3 0 0 0 0 0 3 0 0 3 0 0 3 0 0 3 0 0 3 3" +
+        "\n\t3 0 0 0 3 0 0 3 0 0 0 0 0 3 0 0 3 0 0 3" +
+        "\n\t3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3" +
         "\n" +
         "\n3.\t3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3" +
         "\n\t3 1 3 0 3 0 3 0 3 0 0 0 0 0 0 3 0 0 0 3" +
@@ -76,9 +102,10 @@ public class PathfindingVisualizerPTUI {
         String input;
         Grid grid = new Grid();
         while (true) {
-            System.out.println("\n" + formatGrid(grid.getGrid()));
+            System.out.println("\n- - - - - - - - - - - - - - - - - - - -\n" +
+                formatGrid(grid.getGrid()) + "- - - - - - - - - - - - - - - - - - - -\n");
             System.out.print("Enter your command: ");
-            input = scan.nextLine().toUpperCase();
+            input = scan.nextLine().trim().toUpperCase();
             switch (input) {
                 case "HELP":
                     System.out.println(MESSAGE);
@@ -89,7 +116,7 @@ public class PathfindingVisualizerPTUI {
                     grid.clearPath();
                     solved = false;
                     break;
-                case "PRESET":
+                case "PRESETS":
                     // print relevant information
                     System.out.println(PRESETS);
                     System.out.print("\nEnter the preset number: ");
@@ -101,8 +128,7 @@ public class PathfindingVisualizerPTUI {
                     break;
                 case "ALGORITHMS":
                     System.out.print(ALGORITHMS);
-                    int algorithm = scan.nextInt();
-                    scan.nextLine();
+                    int algorithm = Integer.parseInt(scan.nextLine().trim());
                     switch (algorithm) {
                         // BFS
                         case 1:
@@ -162,6 +188,8 @@ public class PathfindingVisualizerPTUI {
                             }
                             longDelay();
                             break;
+                        case 5:
+                            break;
                         default:
                             System.out.println("Invalid algorithm number.");
                             longDelay();
@@ -177,7 +205,7 @@ public class PathfindingVisualizerPTUI {
                 case "EXIT":
                     System.exit(0);
                 default:
-                    System.out.println("Command not recognized.");
+                    System.out.println("\nCommand not recognized.");
                     shortDelay();
             }
         }
