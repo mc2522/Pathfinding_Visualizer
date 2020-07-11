@@ -10,12 +10,12 @@ public class AStarAlgorithm {
     public class QueueItem {
         // coordinates of the node
         private String coordinates;
-        // current distanceFromStart from start node
-        private double distanceFromStart;
         // distanceFromStart left to target node in a straight line
         private double distanceToTarget;
         // heuristic distanceFromStart to influence search path
         private double heuristicDistance;
+        // total distance so far
+        private double distance;
 
         /**
          * Constructor for QueueItem for a comparator to be used in pQueue
@@ -23,11 +23,11 @@ public class AStarAlgorithm {
          * @param distance              current distanceFromStart from start node
          * @param distanceToTarget      distanceFromStart left to target node in a straight line
          */
-        public QueueItem(String coordinates, double distanceFromStart, double distanceToTarget) {
+        public QueueItem(String coordinates, double distance, double distanceToTarget) {
             this.coordinates = coordinates;
-            this.distanceFromStart = distanceFromStart;
+            this.distance = distance;
             this.distanceToTarget = distanceToTarget;
-            heuristicDistance = distanceFromStart + distanceToTarget;
+            heuristicDistance = distance + distanceToTarget;
         }
 
         /**
@@ -42,8 +42,8 @@ public class AStarAlgorithm {
          * Getter method for distanceFromStart
          * @return distanceFromStart             distanceFromStart from start node
          */
-        public double getDistanceFromStart() {
-            return distanceFromStart;
+        public double getDistance() {
+            return distance;
         }
 
         /**
@@ -165,6 +165,12 @@ public class AStarAlgorithm {
             System.exit(1);
         }
         processed[row][column] = true;
+        // mark visited
+        if (grid[row][column] != TARGET_NODE && grid[row][column] != START_NODE) {
+            grid[row][column] = VISITED_NODE;
+            System.out.println(formatGrid(grid));
+            shortDelay();
+        }
     }
 
     /**
@@ -207,11 +213,11 @@ public class AStarAlgorithm {
                     pQueue.add(pendingItem);
                 }
                 // change to visited node
-                if (grid[updatedRow][updatedColumn] != TARGET_NODE) {
+                /*if (grid[updatedRow][updatedColumn] != TARGET_NODE) {
                     grid[updatedRow][updatedColumn] = VISITED_NODE;
                     System.out.println(formatGrid(grid));
                     shortDelay();
-                }
+                }*/
             }
         }
     }
