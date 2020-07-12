@@ -140,7 +140,7 @@ public class AStarAlgorithm {
      * Looks into pQueue and checks if there is a node with a specific coordinate
      * @return ret      QueueItem if node with coordinate is in pQueue else null
      */
-    public QueueItem containsNode(int row, int column) {
+    private QueueItem containsNode(int row, int column) {
         for (QueueItem item : pQueue) {
             String [] coordinatesSplit = item.getCoordinates().split(", ");
             int checkRow = Integer.parseInt(coordinatesSplit[0]);
@@ -155,7 +155,7 @@ public class AStarAlgorithm {
      * set the coordinates in processed to true
      * @param item      QueueItem that holds the coordinates
      */
-    public void markProcessed(QueueItem item) {
+    private void markProcessed(QueueItem item) {
         String [] coordinatesSplit = item.getCoordinates().split(", ");
         int row = Integer.parseInt(coordinatesSplit[0]);
         int column = Integer.parseInt(coordinatesSplit[1]);
@@ -177,7 +177,7 @@ public class AStarAlgorithm {
      * Looks at all the neighbouring nodes and adds them into pQueue to be processed later
      * @param item      current item in pQueue
      */
-    public void lookAtNeighbours(QueueItem item) {
+    private void lookAtNeighbours(QueueItem item) {
         // convert coordinates
         String [] coordinatesSplit = item.getCoordinates().split(", ");
         int row = Integer.parseInt(coordinatesSplit[0]);
@@ -212,12 +212,6 @@ public class AStarAlgorithm {
                     pQueue.remove(compareItem);
                     pQueue.add(pendingItem);
                 }
-                // change to visited node
-                /*if (grid[updatedRow][updatedColumn] != TARGET_NODE) {
-                    grid[updatedRow][updatedColumn] = VISITED_NODE;
-                    System.out.println(formatGrid(grid));
-                    shortDelay();
-                }*/
             }
         }
     }
@@ -225,7 +219,7 @@ public class AStarAlgorithm {
     /**
      * Calculates the distances from each node to the target node and start node
      */
-    public void calculateDistances() {
+    private void calculateDistances() {
         for (int row = 0; row < DIM; row++) {
             for (int column = 0; column < DIM; column++) {
                 if (grid[row][column] != OBSTACLE_NODE) {
@@ -242,7 +236,7 @@ public class AStarAlgorithm {
     /**
      * Marks the shortest path on the grid by backtracking from target node in prev
      */
-    public void markPath(int row, int column) {
+    private void markPath(int row, int column) {
         String previous = prev[row][column];
         if (grid[row][column] == VISITED_NODE) {
             grid[row][column] = PATH_NODE;

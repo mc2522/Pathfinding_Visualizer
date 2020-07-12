@@ -150,43 +150,13 @@ public class Grid {
     }
 
     /**
-     * Change start node coordinates in the 2D array
-     * @param x     x coordinate of node
-     * @param y     y coordinate of node
+     * Change a node in the grid
+     * @param row           row coordinate of node
+     * @param column        column coordinate of node
+     * @param status        status of node
      */
-    public void changeStartNode(int x, int y) {
-        grid[x][y] = START_NODE;
-        startCoordinates = Integer.toString(x) + ", " + Integer.toString(y);
-    }
-
-    /**
-     * Change target node coordinates in the 2D array
-     * @param x     x coordinate of node
-     * @param y     y coordinate of node
-     */
-    public void changeTargetNode(int x, int y) {
-        grid[x][y] = TARGET_NODE;
-        String [] oldCoordinates = targetCoordinates.split(", ");
-        grid[Integer.parseInt(oldCoordinates[0])][Integer.parseInt(oldCoordinates[1])] = EMPTY_NODE;
-        targetCoordinates = x + ", " + y;
-    }
-
-    /**
-     * Add obstacle node in the 2D array
-     * @param x     x coordinate of node
-     * @param y     y coordinate of node
-     */
-    public void addObstacle(int x, int y) {
-        grid[x][y] = OBSTACLE_NODE;
-    }
-
-    /**
-     * Remove obstacle node in the 2D array
-     * @param x     x coordinate of node
-     * @param y     y coordinate of node
-     */
-    public void removeObstacle(int x, int y) {
-        grid[x][y] = EMPTY_NODE;
+    public void changeNode(int row, int column, int status) {
+        grid[row][column] = status;
     }
 
     /**
@@ -207,11 +177,19 @@ public class Grid {
         return DFSObj.DFS(Integer.parseInt(coordinates[0]), Integer.parseInt(coordinates[1]));
     }
 
+    /**
+     * Perform Dijkstra on grid
+     * @return boolean      true if target node is found else false
+     */
     public boolean performDijkstra() {
         DijkstraAlgorithm DijkstraObj = new DijkstraAlgorithm(grid, startCoordinates);
         return DijkstraObj.Dijkstra();
     }
 
+    /**
+     * Perform A* on grid
+     * @return boolean      true if target node is found else false
+     */
     public boolean performAStar() {
         AStarAlgorithm AStarObj = new AStarAlgorithm(grid, startCoordinates, targetCoordinates);
         return AStarObj.AStar();
@@ -227,6 +205,10 @@ public class Grid {
                     grid[row][column] = EMPTY_NODE;
             }
         }
+    }
+
+    public int getNode(int row, int column) {
+        return grid[row][column];
     }
 
     /**

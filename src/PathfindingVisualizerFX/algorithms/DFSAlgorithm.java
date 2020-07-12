@@ -32,7 +32,7 @@ public class DFSAlgorithm {
      * @param column         column coordinate of node
      * @return boolean  true if within bounds or epty node else false
      */
-    public boolean validator(int row, int column) {
+    private boolean validator(int row, int column) {
         if (row >= 0 && row < DIM && column >=0 && column < DIM && !visited[row][column])
             return true;
         return false;

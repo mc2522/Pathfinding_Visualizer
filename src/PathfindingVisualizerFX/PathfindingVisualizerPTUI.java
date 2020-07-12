@@ -195,13 +195,6 @@ public class PathfindingVisualizerPTUI {
                             longDelay();
                     }
                     break;
-                case "CHANGE TARGET":
-                    System.out.print("\nState x-coordinate (up-down) (1-20): ");
-                    int x = scan.nextInt();
-                    System.out.print("\nState y-coordinate (left-right) (1-20): ");
-                    int y = scan.nextInt();
-                    grid.changeTargetNode(x - 1, y - 1);
-                    break;
                 case "EXIT":
                     System.exit(0);
                 default:

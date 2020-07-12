@@ -51,7 +51,7 @@ public class DijkstraAlgorithm {
     /**
      * Marks the shortest path on the grid by backtracking from target node in prev
      */
-    public void markPath(int row, int column) {
+    private void markPath(int row, int column) {
         String previous = prev[row][column];
         if (grid[row][column] == VISITED_NODE) {
             grid[row][column] = PATH_NODE;

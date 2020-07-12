@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 public class PathfindingVisualizerGUI extends Application {
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("PathfindingVisualizer.fxml"));
         primaryStage.setTitle("Pathfinding Visualizer");
         Scene scene = new Scene(root, 700, 700);

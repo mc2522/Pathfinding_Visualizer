@@ -1,20 +1,28 @@
 package PathfindingVisualizerFX;
 
+import javafx.scene.paint.Color;
+
 public class Utility {
     // dimension of the grid (length x length)
     public final static int DIM = 20;
-    // number code of empty node
+    // number and color code of empty node
     public final static int EMPTY_NODE = 0;
-    // number code of start node
+    public final static Color EMPTY_COLOR = Color.BLACK;
+    // number and color code of start node
     public final static int START_NODE = 1;
-    // number code of target node
+    public final static Color START_COLOR = Color.RED;
+    // number and color code of target node
     public final static int TARGET_NODE = 2;
-    // number code of obstacle node
+    public final static Color TARGET_COLOR = Color.BLUE;
+    // number and color code of obstacle node
     public final static int OBSTACLE_NODE = 3;
-    // number code of visited node
+    public final static Color OBSTACLE_COLOR = Color.WHITE;
+    // number and color code of visited node
     public final static int VISITED_NODE = 4;
-    // number code of path node
+    public final static Color VISITED_COLOR = Color.PURPLE;
+    // number and color code of path node
     public final static int PATH_NODE = 5;
+    public final static Color PATH_COLOR = Color.GREEN;
 
     /**
      * Sleeps for 0.25 seconds so user can catch up
