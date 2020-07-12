@@ -160,6 +160,44 @@ public class Grid {
     }
 
     /**
+     * Change start node in the grid
+     * @param row           row coordinate of start node
+     * @param column        column coordinate of start node
+     * @return boolean      true if change has been made else false
+     */
+    public boolean setStart(int row, int column) {
+        if (grid[row][column] != TARGET_NODE) {
+            String[] startSplit = startCoordinates.split(", ");
+            int prevRow = Integer.parseInt(startSplit[0]);
+            int prevColumn = Integer.parseInt(startSplit[1]);
+            grid[prevRow][prevColumn] = EMPTY_NODE;
+            grid[row][column] = START_NODE;
+            startCoordinates = row + ", " + column;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Change target node in the grid
+     * @param row           row coordinate of target node
+     * @param column        column coordinate of target node
+     * @return boolean      true if change has been made else false
+     */
+    public boolean setTarget(int row, int column) {
+        if (grid[row][column] != START_NODE) {
+            String[] targetSplit = targetCoordinates.split(", ");
+            int prevRow = Integer.parseInt(targetSplit[0]);
+            int prevColumn = Integer.parseInt(targetSplit[1]);
+            grid[prevRow][prevColumn] = EMPTY_NODE;
+            grid[row][column] = TARGET_NODE;
+            targetCoordinates = row + ", " + column;
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Performs BFS on grid
      * @return boolean      true if target node is found else false
      */
