@@ -12,7 +12,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PathfindingVisualizerFX.Controller">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="630.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PathfindingVisualizerFX.Controller">
    <children>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
          <children>
@@ -22,50 +22,44 @@
                </font></Label>
             <ButtonBar prefHeight="40.0" prefWidth="200.0">
               <buttons>
-                <Button mnemonicParsing="false" text="BFS" />
-                  <Button mnemonicParsing="false" text="DFS" />
-                  <Button mnemonicParsing="false" text="Dijkstra" />
-                  <Button mnemonicParsing="false" text="A*" />
+                  <Button fx:id="bfs" mnemonicParsing="false" text="BFS" />
+                  <Button fx:id="dfs" mnemonicParsing="false" text="DFS" />
+                  <Button fx:id="dijkstra" mnemonicParsing="false" text="Dijkstra" />
+                  <Button fx:id="astar" mnemonicParsing="false" text="A*" />
               </buttons>
             </ButtonBar>
          </children>
          <VBox.margin>
-            <Insets top="10.0" />
-         </VBox.margin>
-      </HBox>
-      <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0">
-         <children>
-            <ButtonBar prefHeight="40.0" prefWidth="200.0">
-               <buttons>
-                  <Button mnemonicParsing="false" text="Reset Path">
-                     <font>
-                        <Font name="Verdana" size="12.0" />
-                     </font>
-                  </Button>
-                  <Button mnemonicParsing="false" text="Reset Obstacles">
-                     <font>
-                        <Font name="Verdana" size="12.0" />
-                     </font>
-                  </Button>
-                  <Button mnemonicParsing="false" text="Reset Everything">
-                     <font>
-                        <Font name="Verdana" size="12.0" />
-                     </font>
-                  </Button>
-                  <Button alignment="CENTER" mnemonicParsing="false" text="RUN">
-                     <font>
-                        <Font name="Verdana Bold" size="14.0" />
-                     </font></Button>
-               </buttons>
-            </ButtonBar>
-         </children>
-         <opaqueInsets>
-            <Insets />
-         </opaqueInsets>
-         <VBox.margin>
             <Insets bottom="10.0" top="10.0" />
          </VBox.margin>
       </HBox>
+      <ButtonBar buttonMinWidth="100.0" buttonOrder="U+L_HE+FBIX_NCYOA_R" prefHeight="28.0" prefWidth="645.0">
+         <buttons>
+            <Button fx:id="resetPath" alignment="CENTER" mnemonicParsing="false" text="Reset Path">
+               <font>
+                  <Font name="Verdana" size="12.0" />
+               </font>
+            </Button>
+            <Button fx:id="resetObstacles" mnemonicParsing="false" text="Reset Obstacles">
+               <font>
+                  <Font name="Verdana" size="12.0" />
+               </font>
+            </Button>
+            <Button fx:id="resetEverything" mnemonicParsing="false" text="Reset Everything">
+               <font>
+                  <Font name="Verdana" size="12.0" />
+               </font>
+            </Button>
+            <Button fx:id="run" alignment="CENTER" mnemonicParsing="false" text="RUN">
+               <font>
+                  <Font name="Verdana Bold" size="14.0" />
+               </font>
+            </Button>
+         </buttons>
+         <padding>
+            <Insets bottom="10.0" />
+         </padding>
+      </ButtonBar>
       <GridPane fx:id="gridPane" alignment="CENTER" gridLinesVisible="true">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="30.0" minWidth="10.0" prefWidth="30.0" />

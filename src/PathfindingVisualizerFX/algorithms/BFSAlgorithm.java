@@ -1,25 +1,38 @@
 package PathfindingVisualizerFX.algorithms;
 
+import PathfindingVisualizerFX.Controller;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+
 import static PathfindingVisualizerFX.Utility.*;
+import static PathfindingVisualizerFX.Controller.*;
 
 import java.util.LinkedList;
 import java.util.Queue;
 
 public class BFSAlgorithm {
 
+    private Controller controller;
+    private int [][] grid;
+    private String startCoordinates;
+
+    public BFSAlgorithm(int [][] grid, String startCoordinates) {
+        this.grid = grid;
+        this.startCoordinates = startCoordinates;
+    }
+
     /**
      * Perform BFS on grid
-     * @param grid                  grid to pathfind from start node to end node
-     * @param startCoordinates      start node coordinates
      * @return boolean              true if path to target node exists else false
      */
-    public static boolean BFS(int [][] grid, String startCoordinates) {
+    public boolean BFS() {
         // 2D array to keep track of visited nodes
         boolean [][] visited = new boolean[DIM][DIM];
         Queue<String> queue = new LinkedList<>();
         // add start node coordinates to queue
         queue.add(startCoordinates);
         while(!queue.isEmpty()) {
+
             System.out.println(formatGrid(grid));
 
             // get the row and column coordinates of the current node in queue

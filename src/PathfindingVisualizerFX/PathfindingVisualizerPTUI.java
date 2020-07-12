@@ -111,11 +111,6 @@ public class PathfindingVisualizerPTUI {
                     System.out.println(MESSAGE);
                     longDelay();
                     break;
-                case "CLEAR PATH":
-                    // clear visited nodes and set solved to false so we can run more algorithms
-                    grid.clearPath();
-                    solved = false;
-                    break;
                 case "PRESETS":
                     // print relevant information
                     System.out.println(PRESETS);
@@ -134,7 +129,7 @@ public class PathfindingVisualizerPTUI {
                         case 1:
                             // if the grid is fresh, run bfs
                             if (!solved) {
-                                if (grid.performBFS()) {
+                                if (grid.performBFS(null)) {
                                     System.out.println("Path to target node exists!");
                                 } else {
                                     System.out.println("Path to target node doesn't exist!");

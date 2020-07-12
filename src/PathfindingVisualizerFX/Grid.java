@@ -1,6 +1,7 @@
 package PathfindingVisualizerFX;
 
 import PathfindingVisualizerFX.algorithms.AStarAlgorithm;
+import PathfindingVisualizerFX.algorithms.BFSAlgorithm;
 import PathfindingVisualizerFX.algorithms.DFSAlgorithm;
 import PathfindingVisualizerFX.algorithms.DijkstraAlgorithm;
 
@@ -198,11 +199,60 @@ public class Grid {
     }
 
     /**
+     * Clears the grid of obstacle nodes
+     */
+    public void clearObstacles() {
+        for (int row = 0; row < DIM; row++) {
+            for (int column = 0; column < DIM; column++) {
+                if (grid[row][column] == OBSTACLE_NODE)
+                    grid[row][column] = EMPTY_NODE;
+            }
+        }
+    }
+
+    /**
+     * Clears the grid of visited and path nodes
+     */
+    public void clearPath() {
+        for (int row = 0; row < DIM; row++) {
+            for (int column = 0; column < DIM; column++) {
+                if (grid[row][column] == VISITED_NODE || grid[row][column] == PATH_NODE)
+                    grid[row][column] = EMPTY_NODE;
+            }
+        }
+    }
+
+    /**
+     * Clears the grid of everything except start and target nodes
+     */
+    public void clearEverything() {
+        clearObstacles();
+        clearPath();
+    }
+
+    public int getNode(int row, int column) {
+        return grid[row][column];
+    }
+
+    /**
+     * Get the grid
+     * @return grid     2D array representing grid
+     */
+    public int [][] getGrid() {
+        return grid;
+    }
+
+    /**
      * Performs BFS on grid
      * @return boolean      true if target node is found else false
      */
-    public boolean performBFS() {
-        return BFS(grid, startCoordinates);
+    public boolean performBFS(Controller controller) {
+        BFSAlgorithm BFSObj;
+        if (controller != null) {
+            BFSObj = new BFSAlgorithm(grid, startCoordinates);
+        }
+        BFSObj = new BFSAlgorithm(grid, startCoordinates);
+        return BFSObj.BFS();
     }
 
     /**
@@ -233,27 +283,4 @@ public class Grid {
         return AStarObj.AStar();
     }
 
-    /**
-     * Clears the grid of visited nodes
-     */
-    public void clearPath() {
-        for (int row = 0; row < DIM; row++) {
-            for (int column = 0; column < DIM; column++) {
-                if (grid[row][column] == VISITED_NODE || grid[row][column] == PATH_NODE)
-                    grid[row][column] = EMPTY_NODE;
-            }
-        }
-    }
-
-    public int getNode(int row, int column) {
-        return grid[row][column];
-    }
-
-    /**
-     * Get the grid
-     * @return grid     2D array representing grid
-     */
-    public int [][] getGrid() {
-        return grid;
-    }
 }
