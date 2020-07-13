@@ -6,8 +6,11 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import org.w3c.dom.css.Rect;
 
+import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -31,13 +34,13 @@ public class Controller {
     private Rectangle startRect;
     // stores the current target node/rectangle
     private Rectangle targetRect;
+    //todo
+    HashMap<Integer, HashMap<Integer, Rectangle>> rows;
 
     @FXML
     private GridPane gridPane;
     @FXML
     private Button bfs, dfs, dijkstra, astar, resetPath, resetObstacles, resetEverything, run;
-
-
 
     /**
      * changes the color of the rectangle and the node on the grid at row and column to an empty node
@@ -195,6 +198,20 @@ public class Controller {
         }
     }
 
+    public void updateNode(int row, int column) {
+        if (grid.getNode(row, column) == VISITED_NODE) {
+            rows.get(row).get(column).setFill(VISITED_COLOR);
+        }
+    }
+
+    public void test() {
+        for (int column = 0; column < DIM; column++) {
+            grid.changeNode(1, column, VISITED_NODE);
+            updateNode(1, column);
+            longDelay();
+        }
+    }
+
     /**
      * Initializer function that runs when GUI first opens
      */
@@ -279,8 +296,10 @@ public class Controller {
                     lock = false;
                     break;
                 case "resetEverything":
-                    clearEverything();
-                    lock = false;
+                    //clearEverything();
+                    //lock = false;
+                    // todo changing function for test
+                    test();
                     break;
             }
         };
@@ -317,16 +336,23 @@ public class Controller {
         // assign event handler to run button
         run.setOnMouseClicked(runClickHandler);
 
-        /*// todo
-        TimerTask timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                updateGrid();
-                System.out.println("TASK");
-            }
-        };
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(timerTask, 150, 10);*/
+        // todo create map within a map
+        rows = new HashMap<>();
+        for (int row = 0; row < DIM; row++) {
+            HashMap<Integer, Rectangle> columns = new HashMap<>();
+            rows.put(row, columns);
+        }
+
+        // todo add rectangles to second map
+        for (Node node : gridPane.getChildren()) {
+            Integer row = GridPane.getRowIndex(node);
+            Integer column = GridPane.getColumnIndex(node);
+            if (row == null || column == null || !(node instanceof Rectangle)) continue;
+            Rectangle rect = (Rectangle)node;
+            rows.get(row).put(column, rect);
+        }
+
+        grid.setController(this);
         updateGrid();
     }
 

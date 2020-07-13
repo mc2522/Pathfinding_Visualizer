@@ -17,6 +17,8 @@ public class Grid {
     // coordinates for end node
     private String targetCoordinates;
 
+    private Controller controller;
+
     /**
      * Constructor for Grid
      * Initializes Grid with a 2D array to represent nodes
@@ -150,6 +152,10 @@ public class Grid {
         }
     }
 
+    public void setController(Controller controller) {
+        this.controller = controller;
+    }
+
     /**
      * Change a node in the grid
      * @param row           row coordinate of node
@@ -248,6 +254,8 @@ public class Grid {
      */
     public boolean performBFS() {
         BFSAlgorithm BFSObj = new BFSAlgorithm(grid, startCoordinates);
+        if (controller != null)
+            BFSObj.setController(controller);
         return BFSObj.BFS();
     }
 
@@ -258,7 +266,8 @@ public class Grid {
     public boolean performDFS() {
         DFSAlgorithm DFSObj = new DFSAlgorithm(grid);
         String [] coordinates = startCoordinates.split(", ");
-        return DFSObj.DFS(Integer.parseInt(coordinates[0]), Integer.parseInt(coordinates[1]));
+        DFSObj.DFS(Integer.parseInt(coordinates[0]), Integer.parseInt(coordinates[1]));
+        return true;
     }
 
     /**

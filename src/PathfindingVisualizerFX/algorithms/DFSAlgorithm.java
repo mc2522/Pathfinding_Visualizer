@@ -13,6 +13,8 @@ public class DFSAlgorithm {
     // direction vectors
     private int rowDir[];
     private int columnDir[];
+    // todo
+    private boolean found;
 
     /**
      * Constructor for DFSAlgorithm
@@ -24,6 +26,7 @@ public class DFSAlgorithm {
         this.grid = grid;
         rowDir = new int[] {-1, 0, 1, 0};
         columnDir = new int[] {0, 1, 0, -1};
+        found = false;
     }
 
     /**
@@ -41,7 +44,9 @@ public class DFSAlgorithm {
     /**
      * Perform DFS on grid
      */
-    public boolean DFS(int row, int column) {
+    public void DFS(int row, int column) {
+        if (found)
+            return;
         int d_row, d_column;
         visited[row][column] = true;
         if (grid[row][column] == EMPTY_NODE) {
@@ -49,7 +54,7 @@ public class DFSAlgorithm {
             System.out.println(formatGrid(grid));
             shortDelay();
         } else if (grid[row][column] == TARGET_NODE) {
-            return true;
+            found = true;
         }
 
         for (int index = 0; index < 4; index++) {
@@ -57,10 +62,9 @@ public class DFSAlgorithm {
             d_column = column + columnDir[index];
 
             if (validator(d_row, d_column)) {
-                return DFS(d_row, d_column);
+                DFS(d_row, d_column);
             }
         }
-        return false;
     }
 
 }

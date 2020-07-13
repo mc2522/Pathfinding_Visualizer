@@ -12,13 +12,22 @@ import java.util.Queue;
 
 public class BFSAlgorithm {
 
+    // todo IDEA: map within a map in controller so we update only the rectangles needed
+
     private Controller controller;
     private int [][] grid;
     private String startCoordinates;
 
+    // todo test
+    private int test = 0;
+
     public BFSAlgorithm(int [][] grid, String startCoordinates) {
         this.grid = grid;
         this.startCoordinates = startCoordinates;
+    }
+
+    public void setController(Controller controller) {
+        this.controller = controller;
     }
 
     /**
@@ -32,9 +41,12 @@ public class BFSAlgorithm {
         // add start node coordinates to queue
         queue.add(startCoordinates);
         while(!queue.isEmpty()) {
-
+            /*if (controller != null && test < 6) {
+                System.out.println("Operating on controller");
+                controller.updateGrid();
+                test++;
+            }*/
             System.out.println(formatGrid(grid));
-
             // get the row and column coordinates of the current node in queue
             String [] coordinates = queue.remove().split(", ");
             int row = Integer.parseInt(coordinates[0]);

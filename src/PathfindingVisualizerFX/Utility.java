@@ -23,29 +23,39 @@ public class Utility {
     // number and color code of path node
     public final static int PATH_NODE = 5;
     public final static Color PATH_COLOR = Color.GREEN;
+    // controller
+    Controller controller;
+
+    public Utility(Controller controller) {
+        this.controller = controller;
+    }
+
+    public Controller getController() {
+        return controller;
+    }
 
     /**
      * Sleeps for 0.25 seconds so user can catch up
      */
     public static void shortDelay() {
-        try {
+        /**try {
             Thread.sleep(100);
         } catch (InterruptedException e) {
             e.printStackTrace();
             Thread.currentThread().interrupt();
-        }
+        }**/
     }
 
     /**
      * Sleeps for 1.5 seconds for users so that they can read the messages
      */
     public static void longDelay() {
-        try {
+        /**try {
             Thread.sleep(1500);
         } catch (InterruptedException e) {
             e.printStackTrace();
             Thread.currentThread().interrupt();
-        }
+        }**/
     }
 
     /**
