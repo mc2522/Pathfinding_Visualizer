@@ -41,7 +41,7 @@ public class BFSAlgorithm {
             int column = Integer.parseInt(coordinates[1]);
 
             // check if node is outside boundary or visited
-            if (row < 0 || row >= DIM || column < 0 || column >= DIM || visited[row][column]) continue;
+            if (row < 0 || row >= DIM || column < 0 || column >= DIM || visited[row][column] || grid[row][column] == OBSTACLE_NODE) continue;
 
             // mark current node as visited and check surrounding (adjacent) nodes
             visited[row][column] = true;

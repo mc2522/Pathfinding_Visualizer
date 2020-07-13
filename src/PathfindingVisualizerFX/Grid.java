@@ -246,12 +246,8 @@ public class Grid {
      * Performs BFS on grid
      * @return boolean      true if target node is found else false
      */
-    public boolean performBFS(Controller controller) {
-        BFSAlgorithm BFSObj;
-        if (controller != null) {
-            BFSObj = new BFSAlgorithm(grid, startCoordinates);
-        }
-        BFSObj = new BFSAlgorithm(grid, startCoordinates);
+    public boolean performBFS() {
+        BFSAlgorithm BFSObj = new BFSAlgorithm(grid, startCoordinates);
         return BFSObj.BFS();
     }
 

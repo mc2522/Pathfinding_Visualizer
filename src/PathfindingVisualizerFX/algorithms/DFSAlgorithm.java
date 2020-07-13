@@ -33,7 +33,7 @@ public class DFSAlgorithm {
      * @return boolean  true if within bounds or epty node else false
      */
     private boolean validator(int row, int column) {
-        if (row >= 0 && row < DIM && column >=0 && column < DIM && !visited[row][column])
+        if (row >= 0 && row < DIM && column >=0 && column < DIM && !visited[row][column] && grid[row][column] != OBSTACLE_NODE)
             return true;
         return false;
     }

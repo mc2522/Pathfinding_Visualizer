@@ -129,7 +129,7 @@ public class PathfindingVisualizerPTUI {
                         case 1:
                             // if the grid is fresh, run bfs
                             if (!solved) {
-                                if (grid.performBFS(null)) {
+                                if (grid.performBFS()) {
                                     System.out.println("Path to target node exists!");
                                 } else {
                                     System.out.println("Path to target node doesn't exist!");

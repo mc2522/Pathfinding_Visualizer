@@ -8,6 +8,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Rectangle;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import static PathfindingVisualizerFX.Utility.*;
 
 public class Controller {
@@ -118,12 +121,41 @@ public class Controller {
      */
     private void runAlgorithm(String algorithm) {
         if (!lock) {
+            lock = true;
             switch (algorithm) {
                 case "bfs":
-                    lock = true;
-
+                    if (grid.performBFS()) {
+                        System.out.println("FOUND");
+                    } else {
+                        System.out.println("NOT FOUND");
+                    }
                     updateGrid();
                     break;
+                case "dfs":
+                    if (grid.performDFS()) {
+                        System.out.println("FOUND");
+                    } else {
+                        System.out.println("NOT FOUND");
+                    }
+                    updateGrid();
+                    break;
+                case "dijkstra":
+                    if (grid.performDijkstra()) {
+                        System.out.println("FOUND");
+                    } else {
+                        System.out.println("NOT FOUND");
+                    }
+                    updateGrid();
+                    break;
+                case "astar":
+                    if (grid.performAStar()) {
+                        System.out.println("FOUND");
+                    } else {
+                        System.out.println("NOT FOUND");
+                    }
+                    updateGrid();
+                    break;
+
             }
         }
     }
@@ -285,9 +317,17 @@ public class Controller {
         // assign event handler to run button
         run.setOnMouseClicked(runClickHandler);
 
-        // add all nodes in gridPane to nodes
+        /*// todo
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                updateGrid();
+                System.out.println("TASK");
+            }
+        };
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(timerTask, 150, 10);*/
         updateGrid();
     }
-
 
 }
