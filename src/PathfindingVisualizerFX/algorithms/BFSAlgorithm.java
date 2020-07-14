@@ -1,8 +1,12 @@
 package PathfindingVisualizerFX.algorithms;
 
 import PathfindingVisualizerFX.Controller;
+import javafx.animation.PauseTransition;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
+import javafx.util.Duration;
 
 import static PathfindingVisualizerFX.Utility.*;
 import static PathfindingVisualizerFX.Controller.*;
@@ -41,11 +45,13 @@ public class BFSAlgorithm {
         // add start node coordinates to queue
         queue.add(startCoordinates);
         while(!queue.isEmpty()) {
-            /*if (controller != null && test < 6) {
+            if (controller != null) {
                 System.out.println("Operating on controller");
-                controller.updateGrid();
+                PauseTransition pause = new PauseTransition(Duration.seconds(1));
+                pause.setOnFinished(event -> controller.updateGrid());
+                pause.play();
                 test++;
-            }*/
+            }
             System.out.println(formatGrid(grid));
             // get the row and column coordinates of the current node in queue
             String [] coordinates = queue.remove().split(", ");
@@ -89,7 +95,6 @@ public class BFSAlgorithm {
                     return true;
                 }
             }
-            shortDelay();
         }
         return false;
     }

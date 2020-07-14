@@ -62,7 +62,6 @@ public class DijkstraAlgorithm {
         String [] previousSplit = previous.split(", ");
         int previousRow = Integer.parseInt(previousSplit[0]);
         int previousColumn = Integer.parseInt(previousSplit[1]);
-        shortDelay();
         markPath(previousRow, previousColumn);
     }
 
@@ -134,7 +133,6 @@ public class DijkstraAlgorithm {
                     return true;
                 }
             }
-            shortDelay();
         }
         return false;
     }

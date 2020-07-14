@@ -10,24 +10,24 @@ public class AStarAlgorithm {
     public class QueueItem {
         // coordinates of the node
         private String coordinates;
-        // distanceFromStart left to target node in a straight line
+        // distance left to target node in a straight line
         private double distanceToTarget;
-        // heuristic distanceFromStart to influence search path
-        private double heuristicDistance;
+        // cost to influence search path
+        private double fCost;
         // total distance so far
         private double distance;
 
         /**
          * Constructor for QueueItem for a comparator to be used in pQueue
          * @param coordinates           coordinates of the node
-         * @param distance              current distanceFromStart from start node
-         * @param distanceToTarget      distanceFromStart left to target node in a straight line
+         * @param distance              current distance from start node
+         * @param distanceToTarget      distance left to target node in a straight line
          */
         public QueueItem(String coordinates, double distance, double distanceToTarget) {
             this.coordinates = coordinates;
             this.distance = distance;
             this.distanceToTarget = distanceToTarget;
-            heuristicDistance = distance + distanceToTarget;
+            fCost = distanceToTarget + distance;
         }
 
         /**
@@ -39,8 +39,8 @@ public class AStarAlgorithm {
         }
 
         /**
-         * Getter method for distanceFromStart
-         * @return distanceFromStart             distanceFromStart from start node
+         * Getter method for distance
+         * @return distance            distanceFromStart from start node
          */
         public double getDistance() {
             return distance;
@@ -48,24 +48,24 @@ public class AStarAlgorithm {
 
         /**
          * Getter method for distanceToTarget
-         * @return distanceToTarget     distanceFromStart to target node in a straight line
+         * @return distanceToTarget     distance to target node in a straight line
          */
         public double getDistanceToTarget() {
             return distanceToTarget;
         }
 
         /**
-         * Get the heuristic distanceFromStart to estimate best path in a* algorithm
-         * @return heuristicDistance    distanceFromStart + distanceToTarget
+         * Get the heuristic distance to estimate best path in a* algorithm
+         * @return fCost    distance + distanceToTarget
          */
-        public double getHeuristicDistance() {
-            return heuristicDistance;
+        public double getfCost() {
+            return fCost;
         }
     }
 
 
     /**
-     * A* is just Dijkstra's algorithm with added heuristics (distanceFromStart to target node) added to path
+     * A* is just Dijkstra's algorithm with added heuristics (distance to target node) added to path
      * For more information, watch Computerphile's video: https://www.youtube.com/watch?v=ySN5Wnu88nE
      */
 
@@ -124,15 +124,15 @@ public class AStarAlgorithm {
                 }
             }
         }
-        // calculate all nodes' distanceFromStart to target node
+        // calculate all nodes' distances to target node
         calculateDistances();
         // comparator for priority queue (pQueue)
         Comparator<QueueItem> comparator = (o1, o2) -> {
-            if (o1.getHeuristicDistance() <= o2.getHeuristicDistance())
+            if (o1.getfCost() <= o2.getfCost())
                 return -1;
             return 1;
         };
-        // priority queue to queue items from least heuristic distanceFromStart to most heuristic distanceFromStart
+        // priority queue to queue items from least heuristic distance to most heuristic distance
         pQueue = new PriorityQueue<>(comparator);
     }
 
@@ -159,17 +159,12 @@ public class AStarAlgorithm {
         String [] coordinatesSplit = item.getCoordinates().split(", ");
         int row = Integer.parseInt(coordinatesSplit[0]);
         int column = Integer.parseInt(coordinatesSplit[1]);
-        // todo DEBUG / TEST
-        if (processed[row][column]) {
-            System.out.println("SOMETHING IS WRONG, REMOVED IS ALREADY PROCESSED!");
-            System.exit(1);
-        }
+
         processed[row][column] = true;
         // mark visited
         if (grid[row][column] != TARGET_NODE && grid[row][column] != START_NODE) {
             grid[row][column] = VISITED_NODE;
             System.out.println(formatGrid(grid));
-            shortDelay();
         }
     }
 
@@ -198,7 +193,7 @@ public class AStarAlgorithm {
                 // first create the QueueItem to compare later or add
                 QueueItem pendingItem = new QueueItem(
                     updatedRow + ", " + updatedColumn,
-                    distancesFromStart[updatedRow][updatedColumn],
+                    item.getDistance() + 1,
                     distancesToTarget[updatedRow][updatedColumn]
                 );
 
@@ -207,7 +202,7 @@ public class AStarAlgorithm {
                 if (compareItem == null) {
                     prev[updatedRow][updatedColumn] = item.getCoordinates();
                     pQueue.add(pendingItem);
-                } else if (pendingItem.getHeuristicDistance() < compareItem.getHeuristicDistance()) {
+                } else if (pendingItem.getDistance() < compareItem.getDistance()) {
                     prev[updatedRow][updatedColumn] = item.getCoordinates();
                     pQueue.remove(compareItem);
                     pQueue.add(pendingItem);
@@ -223,9 +218,7 @@ public class AStarAlgorithm {
         for (int row = 0; row < DIM; row++) {
             for (int column = 0; column < DIM; column++) {
                 if (grid[row][column] != OBSTACLE_NODE) {
-                    // pythagorean theorem to calculate straight line distanceFromStart to target node
-                    distancesToTarget[row][column] = Math.sqrt(Math.pow(targetRow - row, 2) + Math.pow(targetColumn - column, 2));
-                    distancesFromStart[row][column] = Math.sqrt(Math.pow(row - startRow, 2) + Math.pow(column - startColumn, 2));
+                    distancesToTarget[row][column] = Math.abs(targetRow - row) + Math.abs(targetColumn - column);
                 } else {
                     distancesToTarget[row][column] = -1;
                 }
@@ -241,7 +234,6 @@ public class AStarAlgorithm {
         if (grid[row][column] == VISITED_NODE) {
             grid[row][column] = PATH_NODE;
             System.out.println(formatGrid(grid));
-            shortDelay();
         } else if (grid[row][column] == START_NODE) {
             return;
         }
@@ -262,7 +254,6 @@ public class AStarAlgorithm {
         pQueue.add(new QueueItem(startCoordinates, 0, distancesToTarget[startRow][startColumn]));
         while (!pQueue.isEmpty()) {
             System.out.println();
-            shortDelay();
             QueueItem removed = pQueue.remove();
             // mark removed as processed
             markProcessed(removed);

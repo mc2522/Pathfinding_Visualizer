@@ -52,7 +52,6 @@ public class DFSAlgorithm {
         if (grid[row][column] == EMPTY_NODE) {
             grid[row][column] = VISITED_NODE;
             System.out.println(formatGrid(grid));
-            shortDelay();
         } else if (grid[row][column] == TARGET_NODE) {
             found = true;
         }

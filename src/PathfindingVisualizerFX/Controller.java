@@ -1,5 +1,10 @@
 package PathfindingVisualizerFX;
 
+import javafx.animation.PauseTransition;
+import javafx.animation.Timeline;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -8,11 +13,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 import org.w3c.dom.css.Rect;
 
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import static PathfindingVisualizerFX.Utility.*;
 
@@ -34,7 +41,7 @@ public class Controller {
     private Rectangle startRect;
     // stores the current target node/rectangle
     private Rectangle targetRect;
-    //todo
+    // map that stores a map that stores the nodes
     HashMap<Integer, HashMap<Integer, Rectangle>> rows;
 
     @FXML
@@ -132,7 +139,6 @@ public class Controller {
                     } else {
                         System.out.println("NOT FOUND");
                     }
-                    updateGrid();
                     break;
                 case "dfs":
                     if (grid.performDFS()) {
@@ -198,17 +204,14 @@ public class Controller {
         }
     }
 
+    /**
+     * Update a specific node
+     * @param row           row of node
+     * @param column        column of node
+     */
     public void updateNode(int row, int column) {
         if (grid.getNode(row, column) == VISITED_NODE) {
             rows.get(row).get(column).setFill(VISITED_COLOR);
-        }
-    }
-
-    public void test() {
-        for (int column = 0; column < DIM; column++) {
-            grid.changeNode(1, column, VISITED_NODE);
-            updateNode(1, column);
-            longDelay();
         }
     }
 
@@ -296,10 +299,8 @@ public class Controller {
                     lock = false;
                     break;
                 case "resetEverything":
-                    //clearEverything();
-                    //lock = false;
-                    // todo changing function for test
-                    test();
+                    clearEverything();
+                    lock = false;
                     break;
             }
         };

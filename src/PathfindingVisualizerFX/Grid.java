@@ -16,7 +16,7 @@ public class Grid {
     private String startCoordinates;
     // coordinates for end node
     private String targetCoordinates;
-
+    // controller for updating GUI
     private Controller controller;
 
     /**

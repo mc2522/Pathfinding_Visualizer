@@ -35,16 +35,16 @@
       </HBox>
       <ButtonBar buttonMinWidth="100.0" buttonOrder="U+L_HE+FBIX_NCYOA_R" prefHeight="28.0" prefWidth="645.0">
          <buttons>
-            <Button fx:id="resetPath" alignment="CENTER" mnemonicParsing="false" text="Reset Path">
-               <font>
-                  <Font name="Verdana" size="12.0" />
-               </font>
-            </Button>
             <Button fx:id="resetObstacles" mnemonicParsing="false" text="Reset Obstacles">
                <font>
                   <Font name="Verdana" size="12.0" />
                </font>
             </Button>
+             <Button fx:id="resetPath" alignment="CENTER" mnemonicParsing="false" text="Reset Path">
+                 <font>
+                     <Font name="Verdana" size="12.0" />
+                 </font>
+             </Button>
             <Button fx:id="resetEverything" mnemonicParsing="false" text="Reset Everything">
                <font>
                   <Font name="Verdana" size="12.0" />

@@ -109,7 +109,6 @@ public class PathfindingVisualizerPTUI {
             switch (input) {
                 case "HELP":
                     System.out.println(MESSAGE);
-                    longDelay();
                     break;
                 case "PRESETS":
                     // print relevant information
@@ -138,7 +137,6 @@ public class PathfindingVisualizerPTUI {
                             } else {
                                 System.out.println("\nCreate a new grid first!");
                             }
-                            longDelay();
                             break;
                         // DFS
                         case 2:
@@ -153,7 +151,6 @@ public class PathfindingVisualizerPTUI {
                             } else {
                                 System.out.println("\nCreate a new grid first!");
                             }
-                            longDelay();
                             break;
                         case 3:
                             // if the grid is fresh, run dijkstra
@@ -167,7 +164,6 @@ public class PathfindingVisualizerPTUI {
                             } else {
                                 System.out.println("\nCreate a new grid first!");
                             }
-                            longDelay();
                             break;
                         case 4:
                             // if the grid is fresh, run A*
@@ -181,20 +177,17 @@ public class PathfindingVisualizerPTUI {
                             } else {
                                 System.out.println("\nCreate a new grid first!");
                             }
-                            longDelay();
                             break;
                         case 5:
                             break;
                         default:
                             System.out.println("Invalid algorithm number.");
-                            longDelay();
                     }
                     break;
                 case "EXIT":
                     System.exit(0);
                 default:
                     System.out.println("\nCommand not recognized.");
-                    shortDelay();
             }
         }
     }

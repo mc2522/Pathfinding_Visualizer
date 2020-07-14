@@ -1,6 +1,15 @@
 package PathfindingVisualizerFX;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
+import javafx.animation.Timeline;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.scene.paint.Color;
+import javafx.util.Duration;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Utility {
     // dimension of the grid (length x length)
@@ -23,40 +32,6 @@ public class Utility {
     // number and color code of path node
     public final static int PATH_NODE = 5;
     public final static Color PATH_COLOR = Color.GREEN;
-    // controller
-    Controller controller;
-
-    public Utility(Controller controller) {
-        this.controller = controller;
-    }
-
-    public Controller getController() {
-        return controller;
-    }
-
-    /**
-     * Sleeps for 0.25 seconds so user can catch up
-     */
-    public static void shortDelay() {
-        /**try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            Thread.currentThread().interrupt();
-        }**/
-    }
-
-    /**
-     * Sleeps for 1.5 seconds for users so that they can read the messages
-     */
-    public static void longDelay() {
-        /**try {
-            Thread.sleep(1500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            Thread.currentThread().interrupt();
-        }**/
-    }
 
     /**
      * Formats the grid into a string to be printed
