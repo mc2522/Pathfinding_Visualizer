@@ -1,5 +1,6 @@
 package PathfindingVisualizerFX.algorithms;
 
+import java.text.DecimalFormat;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
@@ -58,7 +59,7 @@ public class AStarAlgorithm {
          * Get the heuristic distance to estimate best path in a* algorithm
          * @return fCost    distance + distanceToTarget
          */
-        public double getfCost() {
+        public double getFCost() {
             return fCost;
         }
     }
@@ -89,7 +90,6 @@ public class AStarAlgorithm {
     private boolean [][] processed;
     // 2D array to store previous node coordinates
     private String [][] prev;
-
     /**
      * Constructor for AStarAlgorithm
      * @param grid                  2D array to represent grid
@@ -128,7 +128,7 @@ public class AStarAlgorithm {
         calculateDistances();
         // comparator for priority queue (pQueue)
         Comparator<QueueItem> comparator = (o1, o2) -> {
-            if (o1.getfCost() <= o2.getfCost())
+            if (o1.getFCost() <= o2.getFCost())
                 return -1;
             return 1;
         };
@@ -169,6 +169,21 @@ public class AStarAlgorithm {
     }
 
     /**
+     * Calculates the distance between two nodes
+     * @param row           row coordinate of new node
+     * @param column        column coordinate of new node
+     * @param item          old coordinate
+     * @return double       distance
+     */
+    private double calculateDistance(int row, int column, QueueItem item) {
+        String [] coordinatesSplit = item.getCoordinates().split(", ");
+        int prevRow = Integer.parseInt(coordinatesSplit[0]);
+        int prevColumn = Integer.parseInt(coordinatesSplit[1]);
+
+        return Math.sqrt(Math.pow(prevRow - row, 2) + Math.pow(prevColumn - column, 2));
+    }
+
+    /**
      * Looks at all the neighbouring nodes and adds them into pQueue to be processed later
      * @param item      current item in pQueue
      */
@@ -178,11 +193,11 @@ public class AStarAlgorithm {
         int row = Integer.parseInt(coordinatesSplit[0]);
         int column = Integer.parseInt(coordinatesSplit[1]);
         // direction vectors
-        int [] dRow = {-1, 0, 1, 0};
-        int [] dColumn = {0, 1, 0, -1};
+        int [] dRow = {-1, 0, 1, 0, -1, 1, 1, -1};
+        int [] dColumn = {0, 1, 0, -1, 1, 1, -1, -1};
         // look at the top, left, bottom, and right nodes and check if they're processed or obstacle nodes and add them
         // to pQueue accordingly
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 8; i++) {
             int updatedRow = row + dRow[i];
             int updatedColumn = column + dColumn[i];
             // check boundaries
@@ -193,7 +208,7 @@ public class AStarAlgorithm {
                 // first create the QueueItem to compare later or add
                 QueueItem pendingItem = new QueueItem(
                     updatedRow + ", " + updatedColumn,
-                    item.getDistance() + 1,
+                    calculateDistance(updatedRow, updatedColumn, item) + item.getDistance(),
                     distancesToTarget[updatedRow][updatedColumn]
                 );
 
@@ -218,7 +233,7 @@ public class AStarAlgorithm {
         for (int row = 0; row < DIM; row++) {
             for (int column = 0; column < DIM; column++) {
                 if (grid[row][column] != OBSTACLE_NODE) {
-                    distancesToTarget[row][column] = Math.abs(targetRow - row) + Math.abs(targetColumn - column);
+                    distancesToTarget[row][column] = Math.sqrt(Math.pow(targetRow - row, 2) + Math.pow(targetColumn - column, 2));
                 } else {
                     distancesToTarget[row][column] = -1;
                 }

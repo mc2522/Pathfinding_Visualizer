@@ -24,8 +24,8 @@ public class DFSAlgorithm {
         for (int row = 0; row < DIM; row++)
             Arrays.fill(visited[row], false);
         this.grid = grid;
-        rowDir = new int[] {-1, 0, 1, 0};
-        columnDir = new int[] {0, 1, 0, -1};
+        rowDir = new int[] {-1, 0, 1, 0, -1, 1, 1, -1};
+        columnDir = new int[] {0, 1, 0, -1, 1, 1, -1, -1};
         found = false;
     }
 
@@ -56,9 +56,9 @@ public class DFSAlgorithm {
             found = true;
         }
 
-        for (int index = 0; index < 4; index++) {
-            d_row = row + rowDir[index];
-            d_column = column + columnDir[index];
+        for (int i = 0; i < 8; i++) {
+            d_row = row + rowDir[i];
+            d_column = column + columnDir[i];
 
             if (validator(d_row, d_column)) {
                 DFS(d_row, d_column);
