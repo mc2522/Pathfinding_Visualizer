@@ -265,6 +265,8 @@ public class Grid {
      */
     public void performDFS() {
         DFSAlgorithm DFSObj = new DFSAlgorithm(grid);
+        if (controller != null)
+            DFSObj.setController(controller);
         String [] coordinates = startCoordinates.split(", ");
         DFSObj.DFS(Integer.parseInt(coordinates[0]), Integer.parseInt(coordinates[1]));
     }

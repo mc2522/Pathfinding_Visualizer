@@ -1,5 +1,7 @@
 package PathfindingVisualizerFX.algorithms;
 
+import PathfindingVisualizerFX.Controller;
+
 import java.util.Arrays;
 
 import static PathfindingVisualizerFX.Utility.*;
@@ -13,8 +15,10 @@ public class DFSAlgorithm {
     // direction vectors
     private int rowDir[];
     private int columnDir[];
-    // todo
+    // boolean for whether or not found
     private boolean found;
+    // controller for updating gui
+    private Controller controller;
 
     /**
      * Constructor for DFSAlgorithm
@@ -30,10 +34,18 @@ public class DFSAlgorithm {
     }
 
     /**
+     * Set controller to update GUI and access controller methods
+     * @param controller        controller to update GUI
+     */
+    public void setController(Controller controller) {
+        this.controller = controller;
+    }
+
+    /**
      * Validates that the node is within grid bounds or is an empty node
-     * @param row         row coordinate of node
-     * @param column         column coordinate of node
-     * @return boolean  true if within bounds or epty node else false
+     * @param row               row coordinate of node
+     * @param column            column coordinate of node
+     * @return boolean          true if within bounds or epty node else false
      */
     private boolean validator(int row, int column) {
         if (row >= 0 && row < DIM && column >=0 && column < DIM && !visited[row][column] && grid[row][column] != OBSTACLE_NODE)

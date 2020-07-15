@@ -159,39 +159,20 @@ public class Controller {
     private void runAlgorithm(String algorithm) {
         if (!lock) {
             lock = true;
-            // clear everything and update just in case
-            grid.clearEverything();
-            updateGrid();
             switch (algorithm) {
                 case "bfs":
-                    if (grid.performBFS()) {
-                        System.out.println("FOUND");
-                    } else {
-                        System.out.println("NOT FOUND");
-                    }
+                    grid.performBFS();
                     break;
                 case "dfs":
-                    if (grid.performDFS()) {
-                        System.out.println("FOUND");
-                    } else {
-                        System.out.println("NOT FOUND");
-                    }
+                    grid.performDFS();
                     updateGrid();
                     break;
                 case "dijkstra":
-                    if (grid.performDijkstra()) {
-                        System.out.println("FOUND");
-                    } else {
-                        System.out.println("NOT FOUND");
-                    }
+                    grid.performDijkstra();
                     updateGrid();
                     break;
                 case "astar":
-                    if (grid.performAStar()) {
-                        System.out.println("FOUND");
-                    } else {
-                        System.out.println("NOT FOUND");
-                    }
+                    grid.performAStar();
                     updateGrid();
                     break;
 
@@ -230,6 +211,8 @@ public class Controller {
                 case PATH_NODE:
                     rect.setFill(PATH_COLOR);
                     break;
+                case FOUND_NODE:
+                    rect.setFill(FOUND_COLOR);
             }
         }
     }
@@ -257,6 +240,9 @@ public class Controller {
                 break;
             case PATH_NODE:
                 rect.setFill(PATH_COLOR);
+                break;
+            case FOUND_NODE:
+                rect.setFill(FOUND_COLOR);
                 break;
         }
     }

@@ -82,10 +82,10 @@ public class BFSAlgorithm {
                     if (grid[d_row][d_column] == EMPTY_NODE) {
                         grid[d_row][d_column] = VISITED_NODE;
                         if (controller != null) {
-                            System.out.println("Operating on controller");
                             controller.addToQueue(d_row, d_column, VISITED_NODE);
                         }
                     } else if (grid[d_row][d_column] == TARGET_NODE) {
+                        controller.addToQueue(d_row, d_column, FOUND_NODE);
                         return;
                     }
                 }

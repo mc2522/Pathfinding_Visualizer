@@ -23,6 +23,9 @@ public class Utility {
     // number and color code of path node
     public final static int PATH_NODE = 5;
     public final static Color PATH_COLOR = Color.GREEN;
+    // number and color code of found node (for target)
+    public final static int FOUND_NODE = 6;
+    public final static Color FOUND_COLOR = Color.YELLOW;
 
     /**
      * Formats the grid into a string to be printed
