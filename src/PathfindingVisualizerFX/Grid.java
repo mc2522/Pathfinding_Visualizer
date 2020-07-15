@@ -252,40 +252,39 @@ public class Grid {
      * Performs BFS on grid
      * @return boolean      true if target node is found else false
      */
-    public boolean performBFS() {
+    public void performBFS() {
         BFSAlgorithm BFSObj = new BFSAlgorithm(grid, startCoordinates);
         if (controller != null)
             BFSObj.setController(controller);
-        return BFSObj.BFS();
+        BFSObj.BFS();
     }
 
     /**
      * Performs DFS on grid
      * @return boolean      true if target node is found else false
      */
-    public boolean performDFS() {
+    public void performDFS() {
         DFSAlgorithm DFSObj = new DFSAlgorithm(grid);
         String [] coordinates = startCoordinates.split(", ");
         DFSObj.DFS(Integer.parseInt(coordinates[0]), Integer.parseInt(coordinates[1]));
-        return true;
     }
 
     /**
      * Perform Dijkstra on grid
      * @return boolean      true if target node is found else false
      */
-    public boolean performDijkstra() {
+    public void performDijkstra() {
         DijkstraAlgorithm DijkstraObj = new DijkstraAlgorithm(grid, startCoordinates);
-        return DijkstraObj.Dijkstra();
+        DijkstraObj.Dijkstra();
     }
 
     /**
      * Perform A* on grid
      * @return boolean      true if target node is found else false
      */
-    public boolean performAStar() {
+    public void performAStar() {
         AStarAlgorithm AStarObj = new AStarAlgorithm(grid, startCoordinates, targetCoordinates);
-        return AStarObj.AStar();
+        AStarObj.AStar();
     }
 
 }

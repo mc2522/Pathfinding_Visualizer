@@ -155,7 +155,7 @@ public class DijkstraAlgorithm {
      * Run the dijkstra algorithm on the grid
      * @return boolean      true if path from start node to target node is found else false
      */
-    public boolean Dijkstra() {
+    public void Dijkstra() {
         pQueue.add(new QueueItem(startRow + ", " + startColumn, 0));
         // keep calculating node distances while there are unvisited nodes
         while (!pQueue.isEmpty()) {
@@ -173,7 +173,7 @@ public class DijkstraAlgorithm {
             // if the target is reached, recover steps
             if (grid[row][column] == TARGET_NODE) {
                 markPath(row, column);
-                return true;
+                return;
             }
 
             if (grid[row][column] == EMPTY_NODE)
@@ -204,7 +204,6 @@ public class DijkstraAlgorithm {
                 }
             }
         }
-        return false;
     }
 
 }

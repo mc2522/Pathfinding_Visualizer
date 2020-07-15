@@ -1,15 +1,6 @@
 package PathfindingVisualizerFX;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.PauseTransition;
-import javafx.animation.Timeline;
-import javafx.application.Platform;
-import javafx.concurrent.Task;
 import javafx.scene.paint.Color;
-import javafx.util.Duration;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class Utility {
     // dimension of the grid (length x length)

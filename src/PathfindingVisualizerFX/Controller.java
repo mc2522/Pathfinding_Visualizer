@@ -1,29 +1,54 @@
 package PathfindingVisualizerFX;
 
+import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
-import org.w3c.dom.css.Rect;
 
 import java.util.HashMap;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
+import java.util.LinkedList;
+import java.util.Queue;
 
 import static PathfindingVisualizerFX.Utility.*;
 
 public class Controller {
+    // TODO start
+    public class UpdateQueueItem {
+        private int row;
+        private int column;
+        private int status;
+
+        public UpdateQueueItem(int row, int column, int status) {
+            this.row = row;
+            this.column = column;
+            this.status = status;
+        }
+
+        public int getRow() {
+            return row;
+        }
+
+        public int getColumn() {
+            return column;
+        }
+
+        public int getStatus() {
+            return status;
+        }
+    }
+    // TODO end
+
     // start node is being dragged
     private boolean startDrag;
     // target node is being dragged
@@ -42,7 +67,9 @@ public class Controller {
     // stores the current target node/rectangle
     private Rectangle targetRect;
     // map that stores a map that stores the nodes
-    HashMap<Integer, HashMap<Integer, Rectangle>> rows;
+    private HashMap<Integer, HashMap<Integer, Rectangle>> rows;
+    // queue that stores updates to grid
+    private Queue<UpdateQueueItem> updateQueue;
 
     @FXML
     private GridPane gridPane;
@@ -132,6 +159,9 @@ public class Controller {
     private void runAlgorithm(String algorithm) {
         if (!lock) {
             lock = true;
+            // clear everything and update just in case
+            grid.clearEverything();
+            updateGrid();
             switch (algorithm) {
                 case "bfs":
                     if (grid.performBFS()) {
@@ -206,13 +236,53 @@ public class Controller {
 
     /**
      * Update a specific node
-     * @param row           row of node
-     * @param column        column of node
+     * @param item           removed item from updateQueue which is a command
      */
-    public void updateNode(int row, int column) {
-        if (grid.getNode(row, column) == VISITED_NODE) {
-            rows.get(row).get(column).setFill(VISITED_COLOR);
+    public void updateNode(UpdateQueueItem item) {
+        int row = item.getRow();
+        int column = item.getColumn();
+        Rectangle rect = rows.get(row).get(column);
+        switch (item.getStatus()) {
+            case EMPTY_NODE:
+                rect.setFill(EMPTY_COLOR);
+                break;
+            case START_NODE:
+                rect.setFill(START_COLOR);
+                break;
+            case TARGET_NODE:
+                rect.setFill(TARGET_COLOR);
+                break;
+            case VISITED_NODE:
+                rect.setFill(VISITED_COLOR);
+                break;
+            case PATH_NODE:
+                rect.setFill(PATH_COLOR);
+                break;
         }
+    }
+
+    /**
+     * Run the update commands from the updateQueue after every duration
+     */
+    public void updateFromQueue() {
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.1), event -> {
+                // if there's an update command in the queue, run it
+                if (!updateQueue.isEmpty()) {
+                    lock = true;
+                    updateNode(updateQueue.remove());
+                } else {
+                    lock = false;
+                }
+        }));
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
+    }
+
+    /**
+     * Add command to updateQueue
+     */
+    public void addToQueue(int row, int column, int status) {
+        updateQueue.add(new UpdateQueueItem(row, column, status));
     }
 
     /**
@@ -224,8 +294,8 @@ public class Controller {
         startDrag = false;
         targetDrag = false;
         dragLock = false;
-
         grid = new Grid();
+        updateQueue = new LinkedList<>();
 
         // mouse event handler that creates or deletes obstacles when mouse clicks on grid
         EventHandler<MouseEvent> mouseClickHandler = event -> {
@@ -288,20 +358,22 @@ public class Controller {
 
         // mouse event handler for reset buttons
         EventHandler<MouseEvent> resetClickHandler = event -> {
-            Button btn = (Button)event.getSource();
-            String reset = btn.getId();
-            switch (reset) {
-                case "resetObstacles":
-                    clearObstacles();
-                    break;
-                case "resetPath":
-                    clearPath();
-                    lock = false;
-                    break;
-                case "resetEverything":
-                    clearEverything();
-                    lock = false;
-                    break;
+            if (!lock) {
+                Button btn = (Button) event.getSource();
+                String reset = btn.getId();
+                switch (reset) {
+                    case "resetObstacles":
+                        clearObstacles();
+                        break;
+                    case "resetPath":
+                        clearPath();
+                        lock = false;
+                        break;
+                    case "resetEverything":
+                        clearEverything();
+                        lock = false;
+                        break;
+                }
             }
         };
 
@@ -355,6 +427,8 @@ public class Controller {
 
         grid.setController(this);
         updateGrid();
+
+        updateFromQueue();
     }
 
 }

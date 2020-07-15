@@ -1,6 +1,7 @@
 package PathfindingVisualizerFX.algorithms;
 
 import PathfindingVisualizerFX.Controller;
+import PathfindingVisualizerFX.Controller.UpdateQueueItem;
 import javafx.animation.PauseTransition;
 import javafx.util.Duration;
 
@@ -53,21 +54,14 @@ public class BFSAlgorithm {
 
     /**
      * Perform BFS on grid
-     * @return boolean            true if path to target node exists else false
      */
-    public boolean BFS() {
+    public void BFS() {
         // 2D array to keep track of visited nodes
         visited = new boolean[DIM][DIM];
         Queue<String> queue = new LinkedList<>();
         // add start node coordinates to queue
         queue.add(startCoordinates);
         while(!queue.isEmpty()) {
-            if (controller != null) {
-                System.out.println("Operating on controller");
-                PauseTransition pause = new PauseTransition(Duration.seconds(1));
-                pause.setOnFinished(event -> controller.updateGrid());
-                pause.play();
-            }
             System.out.println(formatGrid(grid));
             // get the row and column coordinates of the current node in queue
             String [] coordinates = queue.remove().split(", ");
@@ -87,13 +81,16 @@ public class BFSAlgorithm {
                     queue.add(d_row + ", " + d_column);
                     if (grid[d_row][d_column] == EMPTY_NODE) {
                         grid[d_row][d_column] = VISITED_NODE;
+                        if (controller != null) {
+                            System.out.println("Operating on controller");
+                            controller.addToQueue(d_row, d_column, VISITED_NODE);
+                        }
                     } else if (grid[d_row][d_column] == TARGET_NODE) {
-                        return true;
+                        return;
                     }
                 }
             }
         }
-        return false;
     }
 
 }

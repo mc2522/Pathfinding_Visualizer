@@ -262,7 +262,7 @@ public class AStarAlgorithm {
      * Perform A* algorithm on grid
      * @return boolean      true if a path to target node exists else false
      */
-    public boolean AStar() {
+    public void AStar() {
         // mark start node's previous node in prev
         prev[startRow][startColumn] = "START";
         // add start node to begin with
@@ -278,12 +278,11 @@ public class AStarAlgorithm {
                 int targetRow = Integer.parseInt(targetCoordinatesSplit[0]);
                 int targetColumn = Integer.parseInt(targetCoordinatesSplit[1]);
                 markPath(targetRow, targetColumn);
-                return true;
+                return;
             }
             // look at the neighbours of the removed item and add them to pQueue
             lookAtNeighbours(removed);
         }
-        return false;
     }
 
 }
