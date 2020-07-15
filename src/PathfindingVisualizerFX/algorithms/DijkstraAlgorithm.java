@@ -1,10 +1,45 @@
 package PathfindingVisualizerFX.algorithms;
 
+import java.text.DecimalFormat;
 import java.util.*;
 
 import  static PathfindingVisualizerFX.Utility.*;
 
 public class DijkstraAlgorithm {
+
+    public class QueueItem {
+        // coordinates of node
+        private String coordinates;
+        // distance from start node
+        private double distance;
+
+        /**
+         * Constructor for QueueItem
+         * @param coordinates       coordinates of node
+         * @param distance          distance from start node
+         */
+        public QueueItem(String coordinates, double distance) {
+            this.coordinates = coordinates;
+            this.distance = distance;
+        }
+
+        /**
+         * Getter method for coordinates
+         * @return coordinates      coordinates of node
+         */
+        public String getCoordinates() {
+            return coordinates;
+        }
+
+        /**
+         * Getter method for distance
+         * @return distance         distance from start node
+         */
+        public double getDistance() {
+            return distance;
+        }
+    }
+
     // coordinates of start node
     private int startRow;
     private int startColumn;
@@ -12,12 +47,13 @@ public class DijkstraAlgorithm {
     private int [][] grid;
     // array to mark unvisited nodes
     private boolean [][] unvisited;
-    // counter for number of unvisited nodes in unvisited so we don't have to search the whole 2D array every time
-    private int unvisitedCounter;
     // 2D array to record previous shortest path of nodes
     private String [][] prev;
-    // queue to store coordinates
-    private Queue<String> queue = new LinkedList<>();
+    // priority queue for algorithm
+    private PriorityQueue<QueueItem> pQueue;
+    // direction vectors
+    private int [] rowDir;
+    private int [] columnDir;
 
     /**
      * Constructor for DijkstraAlgorithm
@@ -28,7 +64,6 @@ public class DijkstraAlgorithm {
         this.grid = grid;
         unvisited = new boolean[DIM][DIM];
         prev = new String[DIM][DIM];
-        unvisitedCounter = DIM * DIM;
         // initialize all values in distances and unvisited
         for (int row = 0; row < DIM; row++) {
             for (int column = 0; column < DIM; column++) {
@@ -41,11 +76,21 @@ public class DijkstraAlgorithm {
                 }
             }
         }
+        // direction vectors
+        rowDir = new int[] {-1, 0, 1, 0, -1, 1, 1, -1};
+        columnDir = new int[] {0, 1, 0, -1, 1, 1, -1, -1};
         // get start coordinates
         String [] startSplit = startCoordinates.split(", ");
         startRow = Integer.parseInt(startSplit[0]);
         startColumn = Integer.parseInt(startSplit[1]);
         prev[startRow][startColumn] = "START";
+        // comparator
+        Comparator<QueueItem> comparator = (o1, o2) -> {
+            if (o1.getDistance() < o2.getDistance())
+                return -1;
+            return 1;
+        };
+        pQueue = new PriorityQueue<>(comparator);
     }
 
     /**
@@ -66,71 +111,96 @@ public class DijkstraAlgorithm {
     }
 
     /**
+     * Validates if node at row and column is valid
+     * @param row           row coordinate of node
+     * @param column        column coordinate of node
+     * @return boolean      true if valid else false
+     */
+    public boolean validator(int row, int column) {
+        if (row >= 0 && row < DIM && column >= 0 && column < DIM && unvisited[row][column] && grid[row][column] != OBSTACLE_NODE)
+            return true;
+        return false;
+    }
+
+    /**
+     * Calculates the distance between the previous item's coordinates and the current coordinates
+     * @param row           row coordinate of current node
+     * @param column        column coordinate of current node
+     * @param item          previous item in queue
+     * @return double       distance between the two nodes
+     */
+    public double calculateDistance(int row, int column, QueueItem item) {
+        String [] coordinatesSplit = item.getCoordinates().split(", ");
+        int prevRow = Integer.parseInt(coordinatesSplit[0]);
+        int prevColumn = Integer.parseInt(coordinatesSplit[1]);
+        return Math.sqrt(Math.pow(prevRow - row, 2) + Math.pow(prevColumn - column, 2));
+    }
+
+    /**
+     * Looks into pQueue and checks if there is a node with a specific coordinate
+     * @return ret      QueueItem if node with coordinate is in pQueue else null
+     */
+    private QueueItem containsNode(int row, int column) {
+        for (QueueItem item : pQueue) {
+            String [] coordinatesSplit = item.getCoordinates().split(", ");
+            int checkRow = Integer.parseInt(coordinatesSplit[0]);
+            int checkColumn = Integer.parseInt(coordinatesSplit[1]);
+            if (row == checkRow && column == checkColumn)
+                return item;
+        }
+        return null;
+    }
+
+    /**
      * Run the dijkstra algorithm on the grid
      * @return boolean      true if path from start node to target node is found else false
      */
     public boolean Dijkstra() {
-        // add start node coordinates to queue to begin with
-        queue.add(startRow + ", " + startColumn);
+        pQueue.add(new QueueItem(startRow + ", " + startColumn, 0));
         // keep calculating node distances while there are unvisited nodes
-        while (unvisitedCounter > 0 || !queue.isEmpty()) {
-            System.out.println(formatGrid(grid));
+        while (!pQueue.isEmpty()) {
 
-            // get the row and column coordinates of the current node in queue
-            String [] coordinates = queue.remove().split(", ");
+            System.out.println(formatGrid(grid));
+            QueueItem item = pQueue.remove();
+            // get the row and column coordinates of the current node in oldQueue
+            String [] coordinates = item.getCoordinates().split(", ");
             int row = Integer.parseInt(coordinates[0]);
             int column = Integer.parseInt(coordinates[1]);
 
             // check if node is outside boundary or should not be visited
-            if (row < 0 || row >= DIM || column < 0 || column >= DIM || !unvisited[row][column] || prev[row][column].equals("X, X")) continue;
+            if (!validator(row, column)) continue;
+
+            // if the target is reached, recover steps
+            if (grid[row][column] == TARGET_NODE) {
+                markPath(row, column);
+                return true;
+            }
+
+            if (grid[row][column] == EMPTY_NODE)
+                grid[row][column] = VISITED_NODE;
 
             // update unvisited
             unvisited[row][column] = false;
-            unvisitedCounter--;
 
-            // check neighbouring nodes and assign their prev node to keep track of shortest path
-            if (row > 0) {
-                queue.add((row - 1) + ", " + column);
-                if (grid[row - 1][column] == EMPTY_NODE) {
-                    grid[row - 1][column] = VISITED_NODE;
-                    prev[row - 1][column] = row + ", " + column;
-                } else if (grid[row - 1][column] == TARGET_NODE) {
-                    prev[row - 1][column] = row + ", " + column;
-                    markPath(row - 1, column);
-                    return true;
-                }
-            }
-            if (row < DIM - 1) {
-                queue.add((row + 1) + ", " + column);
-                if (grid[row + 1][column] == EMPTY_NODE) {
-                    grid[row + 1][column] = VISITED_NODE;
-                    prev[row + 1][column] = row + ", " + column;
-                } else if (grid[row + 1][column] == TARGET_NODE) {
-                    prev[row + 1][column] = row + ", " + column;
-                    markPath(row + 1, column);
-                    return true;
-                }
-            }
-            if (column > 0) {
-                queue.add(row + ", " + (column - 1));
-                if (grid[row][column - 1] == EMPTY_NODE) {
-                    grid[row][column - 1] = VISITED_NODE;
-                    prev[row][column - 1] = row + ", " + column;
-                } else if (grid[row][column - 1] == TARGET_NODE) {
-                    prev[row][column - 1] = row + ", " + column;
-                    markPath(row, column - 1);
-                    return true;
-                }
-            }
-            if (column < DIM - 1) {
-                queue.add(row + ", " + (column + 1));
-                if (grid[row][column + 1] == EMPTY_NODE) {
-                    grid[row][column + 1] = VISITED_NODE;
-                    prev[row][column + 1] = row + ", " + column;
-                } else if (grid[row][column + 1] == TARGET_NODE) {
-                    prev[row][column + 1] = row + ", " + column;
-                    markPath(row, column + 1);
-                    return true;
+            // look through neighbours
+            for (int i = 0; i < 8; i++) {
+                int updatedRow = row + rowDir[i];
+                int updatedColumn = column + columnDir[i];
+
+                // create new item
+                QueueItem pendingItem = new QueueItem(
+                    updatedRow + ", " + updatedColumn,
+                    calculateDistance(updatedRow, updatedColumn, item) + item.getDistance()
+                );
+
+                QueueItem compareItem = containsNode(updatedRow, updatedColumn);
+                if (compareItem == null && validator(updatedRow, updatedColumn)) {
+                    pQueue.add(pendingItem);
+                    prev[updatedRow][updatedColumn] = item.getCoordinates();
+                } else if (pendingItem.getDistance() < item.getDistance()) {
+                    prev[updatedRow][updatedColumn] = item.getCoordinates();
+                    pQueue.remove(compareItem);
+                    pQueue.add(pendingItem);
                 }
             }
         }

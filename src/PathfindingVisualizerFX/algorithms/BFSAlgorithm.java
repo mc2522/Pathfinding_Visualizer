@@ -14,6 +14,8 @@ public class BFSAlgorithm {
     private int [][] grid;
     private String startCoordinates;
     private boolean [][] visited;
+    private int [] rowDir;
+    private int [] columnDir;
 
     /**
      * Constructor for BFSAlgorithm
@@ -24,6 +26,9 @@ public class BFSAlgorithm {
         this.grid = grid;
         this.startCoordinates = startCoordinates;
         visited = new boolean[DIM][DIM];
+        // direction vectors
+        rowDir = new int[] {-1, 0, 1, 0, -1, 1, 1, -1};
+        columnDir = new int[] {0, 1, 0, -1, 1, 1, -1, -1};
     }
 
     /**
@@ -51,9 +56,6 @@ public class BFSAlgorithm {
      * @return boolean            true if path to target node exists else false
      */
     public boolean BFS() {
-        // direction vectors
-        int [] rowDir = {-1, 0, 1, 0, -1, 1, 1, -1};
-        int [] columnDir = {0, 1, 0, -1, 1, 1, -1, -1};
         // 2D array to keep track of visited nodes
         visited = new boolean[DIM][DIM];
         Queue<String> queue = new LinkedList<>();

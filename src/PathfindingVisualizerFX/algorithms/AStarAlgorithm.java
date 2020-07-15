@@ -1,6 +1,5 @@
 package PathfindingVisualizerFX.algorithms;
 
-import java.text.DecimalFormat;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
@@ -82,14 +81,16 @@ public class AStarAlgorithm {
     private int targetColumn;
     // 2D array to store all nodes' distances to target node
     private double [][] distancesToTarget;
-    // 2D array to store all nodes' distances from start node
-    private double [][] distancesFromStart;
     // priority queue to determine which nodes get processed first
     private PriorityQueue<QueueItem> pQueue;
     // 2D array to store booleans on whether or not a node has processed
     private boolean [][] processed;
     // 2D array to store previous node coordinates
     private String [][] prev;
+    // direction vectors
+    private int [] rowDir;
+    private int [] columnDir;
+
     /**
      * Constructor for AStarAlgorithm
      * @param grid                  2D array to represent grid
@@ -110,7 +111,6 @@ public class AStarAlgorithm {
         this.targetColumn = Integer.parseInt(targetSplit[1]);
         // initialize values
         distancesToTarget = new double[DIM][DIM];
-        distancesFromStart = new double[DIM][DIM];
         processed = new boolean[DIM][DIM];
         prev = new String[DIM][DIM];
         for (int row = 0; row < DIM; row++) {
@@ -120,10 +120,13 @@ public class AStarAlgorithm {
                     prev[row][column] = "X, X";
                 } else {
                     processed[row][column] = false;
-                    prev[row][column] = "";
+                    prev[row][column] = "O, O";
                 }
             }
         }
+        // direction vectors
+        rowDir = new int[] {-1, 0, 1, 0, -1, 1, 1, -1};
+        columnDir = new int[] {0, 1, 0, -1, 1, 1, -1, -1};
         // calculate all nodes' distances to target node
         calculateDistances();
         // comparator for priority queue (pQueue)
@@ -192,14 +195,11 @@ public class AStarAlgorithm {
         String [] coordinatesSplit = item.getCoordinates().split(", ");
         int row = Integer.parseInt(coordinatesSplit[0]);
         int column = Integer.parseInt(coordinatesSplit[1]);
-        // direction vectors
-        int [] dRow = {-1, 0, 1, 0, -1, 1, 1, -1};
-        int [] dColumn = {0, 1, 0, -1, 1, 1, -1, -1};
         // look at the top, left, bottom, and right nodes and check if they're processed or obstacle nodes and add them
         // to pQueue accordingly
         for (int i = 0; i < 8; i++) {
-            int updatedRow = row + dRow[i];
-            int updatedColumn = column + dColumn[i];
+            int updatedRow = row + rowDir[i];
+            int updatedColumn = column + columnDir[i];
             // check boundaries
             if (updatedRow >= 0 && updatedRow < DIM && updatedColumn >= 0 && updatedColumn < DIM
                 && !processed[updatedRow][updatedColumn]
