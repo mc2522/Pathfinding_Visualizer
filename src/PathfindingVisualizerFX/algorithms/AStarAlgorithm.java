@@ -64,12 +64,6 @@ public class AStarAlgorithm {
         }
     }
 
-
-    /**
-     * A* is just Dijkstra's algorithm with added heuristics (distance to target node) added to path
-     * For more information, watch Computerphile's video: https://www.youtube.com/watch?v=ySN5Wnu88nE
-     */
-
     // 2D array to represent grid
     private int [][] grid;
     // coordinates of start node
