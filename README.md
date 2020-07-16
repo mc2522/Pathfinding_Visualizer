@@ -3,4 +3,5 @@ This application is a GUI that visualizes simple pathfinding/search algorithms: 
 
 ## Create an obstacle
 Users can drag their mouse across the grid to create obstacles.
-![Create an obstacle](src/PathfindingVisualizerFX/demonstration/obstacle.gif)
+
+![Create an obstacle](src/PathfindingVisualizerFX/demonstration/obstacle.gif = 315x350)
