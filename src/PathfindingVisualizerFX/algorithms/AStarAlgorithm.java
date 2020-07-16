@@ -1,10 +1,9 @@
 package PathfindingVisualizerFX.algorithms;
 
-import PathfindingVisualizerFX.Controller;
-
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
+import PathfindingVisualizerFX.Controller;
 import static PathfindingVisualizerFX.Utility.*;
 
 public class AStarAlgorithm {

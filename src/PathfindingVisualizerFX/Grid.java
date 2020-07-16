@@ -6,7 +6,6 @@ import PathfindingVisualizerFX.algorithms.DFSAlgorithm;
 import PathfindingVisualizerFX.algorithms.DijkstraAlgorithm;
 
 import java.util.Arrays;
-import static PathfindingVisualizerFX.algorithms.BFSAlgorithm.*;
 import static PathfindingVisualizerFX.Utility.*;
 
 public class Grid {

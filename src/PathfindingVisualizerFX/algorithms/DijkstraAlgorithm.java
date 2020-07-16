@@ -2,7 +2,6 @@ package PathfindingVisualizerFX.algorithms;
 
 import PathfindingVisualizerFX.Controller;
 
-import java.text.DecimalFormat;
 import java.util.*;
 
 import  static PathfindingVisualizerFX.Utility.*;
@@ -172,7 +171,6 @@ public class DijkstraAlgorithm {
         pQueue.add(new QueueItem(startRow + ", " + startColumn, 0));
         // keep calculating node distances while there are unvisited nodes
         while (!pQueue.isEmpty()) {
-
             System.out.println(formatGrid(grid));
             QueueItem item = pQueue.remove();
             // get the row and column coordinates of the current node in oldQueue

@@ -12,7 +12,6 @@ public class PathfindingVisualizerGUI extends Application {
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("PathfindingVisualizer.fxml"));
         Parent root = fxmlLoader.load();
-        Controller controller = fxmlLoader.getController();
         primaryStage.setTitle("Pathfinding Visualizer");
         Scene scene = new Scene(root, 630, 700);
         primaryStage.setScene(scene);

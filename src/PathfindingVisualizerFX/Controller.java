@@ -1,12 +1,7 @@
 package PathfindingVisualizerFX;
 
 import javafx.animation.KeyFrame;
-import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
-import javafx.application.Platform;
-import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -23,31 +18,51 @@ import java.util.Queue;
 import static PathfindingVisualizerFX.Utility.*;
 
 public class Controller {
-    // TODO start
+
     public class UpdateQueueItem {
+        // row of node
         private int row;
+        // column of node
         private int column;
+        // int status (empty, start, target, visited, path, found)
         private int status;
 
+        /**
+         * Constructor for UpdateQueueItem
+         * @param row       row coordinate of node
+         * @param column    column coordinate of node
+         * @param status    status of node
+         */
         public UpdateQueueItem(int row, int column, int status) {
             this.row = row;
             this.column = column;
             this.status = status;
         }
 
+        /**
+         * Getter method of row
+         * @return row      row coordinate of node
+         */
         public int getRow() {
             return row;
         }
 
+        /**
+         * Getter method of column
+         * @return column   column coordinate of node
+         */
         public int getColumn() {
             return column;
         }
 
+        /**
+         * Getter method of status
+         * @return status   status of node
+         */
         public int getStatus() {
             return status;
         }
     }
-    // TODO end
 
     // start node is being dragged
     private boolean startDrag;
@@ -55,8 +70,10 @@ public class Controller {
     private boolean targetDrag;
     // lock on both start and target drag
     private boolean dragLock;
-    // lock on everything unless reset
+    // lock on running algorithms
     private boolean lock;
+    // lock unless gui isReset updating
+    private boolean isReset;
     // stores which algorithm to run and its button
     private String algorithm;
     private Button algoBtn;
@@ -157,8 +174,9 @@ public class Controller {
      * @param algorithm     algorithm to run
      */
     private void runAlgorithm(String algorithm) {
-        if (!lock) {
+        if (!lock && isReset) {
             lock = true;
+            isReset = false;
             switch (algorithm) {
                 case "bfs":
                     grid.performBFS();
@@ -272,16 +290,17 @@ public class Controller {
      */
     public void initialize() {
         System.out.println("START");
-        // boolean initialized
+        // initialize variables
         startDrag = false;
         targetDrag = false;
         dragLock = false;
+        isReset = true;
         grid = new Grid();
         updateQueue = new LinkedList<>();
 
         // mouse event handler that creates or deletes obstacles when mouse clicks on grid
         EventHandler<MouseEvent> mouseClickHandler = event -> {
-            if (!lock) {
+            if (!lock && isReset) {
                 Rectangle sourceRect = (Rectangle) event.getSource();
                 Integer row = GridPane.getRowIndex(sourceRect);
                 Integer column = GridPane.getColumnIndex(sourceRect);
@@ -297,7 +316,7 @@ public class Controller {
 
         // mouse event handler that creates or deletes obstacles when mouse drags on grid
         EventHandler<MouseEvent> mouseDragHandler = event ->  {
-            if (!lock) {
+            if (!lock && isReset) {
                 Rectangle sourceRect = (Rectangle) event.getSource();
                 Integer row = GridPane.getRowIndex(sourceRect);
                 Integer column = GridPane.getColumnIndex(sourceRect);
@@ -349,11 +368,11 @@ public class Controller {
                         break;
                     case "resetPath":
                         clearPath();
-                        lock = false;
+                        isReset = true;
                         break;
                     case "resetEverything":
                         clearEverything();
-                        lock = false;
+                        isReset = true;
                         break;
                 }
             }
@@ -391,14 +410,14 @@ public class Controller {
         // assign event handler to run button
         run.setOnMouseClicked(runClickHandler);
 
-        // todo create map within a map
+        // initialize second map
         rows = new HashMap<>();
         for (int row = 0; row < DIM; row++) {
             HashMap<Integer, Rectangle> columns = new HashMap<>();
             rows.put(row, columns);
         }
 
-        // todo add rectangles to second map
+        // add rectangles/nodes to the map of maps
         for (Node node : gridPane.getChildren()) {
             Integer row = GridPane.getRowIndex(node);
             Integer column = GridPane.getColumnIndex(node);
@@ -408,8 +427,9 @@ public class Controller {
         }
 
         grid.setController(this);
+        // go through the grid and update the GUI
         updateGrid();
-
+        // update every piece every 0.1 seconds
         updateFromQueue();
     }
 

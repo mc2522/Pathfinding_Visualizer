@@ -1,10 +1,6 @@
 package PathfindingVisualizerFX.algorithms;
 
 import PathfindingVisualizerFX.Controller;
-import PathfindingVisualizerFX.Controller.UpdateQueueItem;
-import javafx.animation.PauseTransition;
-import javafx.util.Duration;
-
 import static PathfindingVisualizerFX.Utility.*;
 
 import java.util.LinkedList;

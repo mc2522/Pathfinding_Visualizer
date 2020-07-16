@@ -1,9 +1,8 @@
 package PathfindingVisualizerFX.algorithms;
 
-import PathfindingVisualizerFX.Controller;
-
 import java.util.Arrays;
 
+import PathfindingVisualizerFX.Controller;
 import static PathfindingVisualizerFX.Utility.*;
 
 public class DFSAlgorithm {
