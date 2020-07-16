@@ -25,4 +25,4 @@ Users are able to run the Dijkstra and A* pathfinding algorithms.
 
 ## Example of A* in Maze
 
-![Example of A* Algorithm](src/PathfindingVisualizerFX/demonstration/aStar.gif)
+<img src="src/PathfindingVisualizerFX/demonstration/aStar.gif" width="472.5" height="525" alt="Pathfinding algorithms with obstacles" />
