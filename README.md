@@ -1,6 +1,7 @@
 # Pathfinding Visualizer
 This application is a GUI that visualizes simple pathfinding/search algorithms: BFS, DFS, Dijkstra, A*. Users are able to move around the start and target nodes, and create obstacles to block paths. It is written in Java and uses the JavaFX 11 platform.
 <br />
+<br />
 
 ## Creating Obstacles
 Obstacles can be created by clicking and dragging the cursor across the grid.
