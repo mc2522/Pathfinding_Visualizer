@@ -1,5 +1,7 @@
 package PathfindingVisualizerFX.algorithms;
 
+import PathfindingVisualizerFX.Controller;
+
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
@@ -90,6 +92,8 @@ public class AStarAlgorithm {
     // direction vectors
     private int [] rowDir;
     private int [] columnDir;
+    // controller for updating GUI
+    private Controller controller;
 
     /**
      * Constructor for AStarAlgorithm
@@ -140,6 +144,14 @@ public class AStarAlgorithm {
     }
 
     /**
+     * Set controller for updating GUI
+     * @param controller        controller for updating GUI
+     */
+    public void setController(Controller controller) {
+        this.controller = controller;
+    }
+
+    /**
      * Looks into pQueue and checks if there is a node with a specific coordinate
      * @return ret      QueueItem if node with coordinate is in pQueue else null
      */
@@ -167,6 +179,7 @@ public class AStarAlgorithm {
         // mark visited
         if (grid[row][column] != TARGET_NODE && grid[row][column] != START_NODE) {
             grid[row][column] = VISITED_NODE;
+            controller.addToQueue(row, column, VISITED_NODE);
             System.out.println(formatGrid(grid));
         }
     }
@@ -248,6 +261,7 @@ public class AStarAlgorithm {
         String previous = prev[row][column];
         if (grid[row][column] == VISITED_NODE) {
             grid[row][column] = PATH_NODE;
+            controller.addToQueue(row, column, PATH_NODE);
             System.out.println(formatGrid(grid));
         } else if (grid[row][column] == START_NODE) {
             return;
@@ -277,6 +291,7 @@ public class AStarAlgorithm {
                 String [] targetCoordinatesSplit = targetCoordinates.split(", ");
                 int targetRow = Integer.parseInt(targetCoordinatesSplit[0]);
                 int targetColumn = Integer.parseInt(targetCoordinatesSplit[1]);
+                controller.addToQueue(targetRow, targetColumn, FOUND_NODE);
                 markPath(targetRow, targetColumn);
                 return;
             }

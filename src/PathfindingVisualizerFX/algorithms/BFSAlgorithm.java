@@ -33,8 +33,8 @@ public class BFSAlgorithm {
     }
 
     /**
-     * Set controller
-     * @param controller        FXML controller
+     * Set controller for updating GUI
+     * @param controller        controller for updating GUI
      */
     public void setController(Controller controller) {
         this.controller = controller;
@@ -81,9 +81,7 @@ public class BFSAlgorithm {
                     queue.add(d_row + ", " + d_column);
                     if (grid[d_row][d_column] == EMPTY_NODE) {
                         grid[d_row][d_column] = VISITED_NODE;
-                        if (controller != null) {
-                            controller.addToQueue(d_row, d_column, VISITED_NODE);
-                        }
+                        controller.addToQueue(d_row, d_column, VISITED_NODE);
                     } else if (grid[d_row][d_column] == TARGET_NODE) {
                         controller.addToQueue(d_row, d_column, FOUND_NODE);
                         return;

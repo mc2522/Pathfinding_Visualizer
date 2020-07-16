@@ -254,9 +254,10 @@ public class Grid {
      */
     public void performBFS() {
         BFSAlgorithm BFSObj = new BFSAlgorithm(grid, startCoordinates);
-        if (controller != null)
+        if (controller != null) {
             BFSObj.setController(controller);
-        BFSObj.BFS();
+            BFSObj.BFS();
+        }
     }
 
     /**
@@ -265,10 +266,11 @@ public class Grid {
      */
     public void performDFS() {
         DFSAlgorithm DFSObj = new DFSAlgorithm(grid);
-        if (controller != null)
+        if (controller != null) {
             DFSObj.setController(controller);
-        String [] coordinates = startCoordinates.split(", ");
-        DFSObj.DFS(Integer.parseInt(coordinates[0]), Integer.parseInt(coordinates[1]));
+            String[] coordinates = startCoordinates.split(", ");
+            DFSObj.DFS(Integer.parseInt(coordinates[0]), Integer.parseInt(coordinates[1]));
+        }
     }
 
     /**
@@ -277,7 +279,10 @@ public class Grid {
      */
     public void performDijkstra() {
         DijkstraAlgorithm DijkstraObj = new DijkstraAlgorithm(grid, startCoordinates);
-        DijkstraObj.Dijkstra();
+        if (controller != null) {
+            DijkstraObj.setController(controller);
+            DijkstraObj.Dijkstra();
+        }
     }
 
     /**
@@ -286,7 +291,10 @@ public class Grid {
      */
     public void performAStar() {
         AStarAlgorithm AStarObj = new AStarAlgorithm(grid, startCoordinates, targetCoordinates);
-        AStarObj.AStar();
+        if (controller != null) {
+            AStarObj.setController(controller);
+            AStarObj.AStar();
+        }
     }
 
 }

@@ -15,10 +15,10 @@ public class DFSAlgorithm {
     // direction vectors
     private int rowDir[];
     private int columnDir[];
-    // boolean for whether or not found
-    private boolean found;
     // controller for updating gui
     private Controller controller;
+    // boolean for whether or not the target node was found
+    private boolean found;
 
     /**
      * Constructor for DFSAlgorithm
@@ -57,15 +57,18 @@ public class DFSAlgorithm {
      * Perform DFS on grid
      */
     public void DFS(int row, int column) {
-        if (found)
-            return;
+        if (found) return;
+
         int d_row, d_column;
         visited[row][column] = true;
         if (grid[row][column] == EMPTY_NODE) {
             grid[row][column] = VISITED_NODE;
             System.out.println(formatGrid(grid));
+            controller.addToQueue(row, column, VISITED_NODE);
         } else if (grid[row][column] == TARGET_NODE) {
             found = true;
+            controller.addToQueue(row, column, FOUND_NODE);
+            return;
         }
 
         for (int i = 0; i < 8; i++) {

@@ -165,17 +165,13 @@ public class Controller {
                     break;
                 case "dfs":
                     grid.performDFS();
-                    updateGrid();
                     break;
                 case "dijkstra":
                     grid.performDijkstra();
-                    updateGrid();
                     break;
                 case "astar":
                     grid.performAStar();
-                    updateGrid();
                     break;
-
             }
         }
     }
@@ -251,14 +247,14 @@ public class Controller {
      * Run the update commands from the updateQueue after every duration
      */
     public void updateFromQueue() {
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.1), event -> {
-                // if there's an update command in the queue, run it
-                if (!updateQueue.isEmpty()) {
-                    lock = true;
-                    updateNode(updateQueue.remove());
-                } else {
-                    lock = false;
-                }
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.05), event -> {
+            // if there's an update command in the queue, run it
+            if (!updateQueue.isEmpty()) {
+                lock = true;
+                updateNode(updateQueue.remove());
+            } else {
+                lock = false;
+            }
         }));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();

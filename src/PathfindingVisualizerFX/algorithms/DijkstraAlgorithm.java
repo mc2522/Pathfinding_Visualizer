@@ -1,5 +1,7 @@
 package PathfindingVisualizerFX.algorithms;
 
+import PathfindingVisualizerFX.Controller;
+
 import java.text.DecimalFormat;
 import java.util.*;
 
@@ -54,6 +56,8 @@ public class DijkstraAlgorithm {
     // direction vectors
     private int [] rowDir;
     private int [] columnDir;
+    // controller for updating GUI
+    private Controller controller;
 
     /**
      * Constructor for DijkstraAlgorithm
@@ -94,11 +98,20 @@ public class DijkstraAlgorithm {
     }
 
     /**
+     * Set controller to update GUI
+     * @param controller        controller to update GUI
+     */
+    public void setController(Controller controller) {
+        this.controller = controller;
+    }
+
+    /**
      * Marks the shortest path on the grid by backtracking from target node in prev
      */
     private void markPath(int row, int column) {
         String previous = prev[row][column];
         if (grid[row][column] == VISITED_NODE) {
+            controller.addToQueue(row, column, PATH_NODE);
             grid[row][column] = PATH_NODE;
             System.out.println(formatGrid(grid));
         } else if (grid[row][column] == START_NODE) {
@@ -172,12 +185,16 @@ public class DijkstraAlgorithm {
 
             // if the target is reached, recover steps
             if (grid[row][column] == TARGET_NODE) {
+                controller.addToQueue(row, column, FOUND_NODE);
                 markPath(row, column);
                 return;
             }
 
-            if (grid[row][column] == EMPTY_NODE)
+            // mark visited if appropriate
+            if (grid[row][column] == EMPTY_NODE) {
                 grid[row][column] = VISITED_NODE;
+                controller.addToQueue(row, column, VISITED_NODE);
+            }
 
             // update unvisited
             unvisited[row][column] = false;
